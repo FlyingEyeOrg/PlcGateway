@@ -34,8 +34,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ConnectPLCButton = new System.Windows.Forms.Button();
             this.DisconnectPLCButton = new System.Windows.Forms.Button();
-            this.ConnectIdTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.LogRichTextBox = new System.Windows.Forms.RichTextBox();
             this.ReadTagButton = new System.Windows.Forms.Button();
             this.ReadTagAddressTextBox = new System.Windows.Forms.TextBox();
@@ -99,29 +97,13 @@
             // 
             // DisconnectPLCButton
             // 
-            this.DisconnectPLCButton.Location = new System.Drawing.Point(12, 93);
+            this.DisconnectPLCButton.Location = new System.Drawing.Point(126, 64);
             this.DisconnectPLCButton.Name = "DisconnectPLCButton";
             this.DisconnectPLCButton.Size = new System.Drawing.Size(75, 23);
             this.DisconnectPLCButton.TabIndex = 2;
             this.DisconnectPLCButton.Text = "PLC断开";
             this.DisconnectPLCButton.UseVisualStyleBackColor = true;
             this.DisconnectPLCButton.Click += new System.EventHandler(this.DisconnectPLCButton_Click);
-            // 
-            // ConnectIdTextBox
-            // 
-            this.ConnectIdTextBox.Location = new System.Drawing.Point(140, 66);
-            this.ConnectIdTextBox.Name = "ConnectIdTextBox";
-            this.ConnectIdTextBox.Size = new System.Drawing.Size(58, 21);
-            this.ConnectIdTextBox.TabIndex = 3;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(93, 69);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "连接ID";
             // 
             // LogRichTextBox
             // 
@@ -201,7 +183,7 @@
             // 
             // CleanTagButton
             // 
-            this.CleanTagButton.Location = new System.Drawing.Point(12, 122);
+            this.CleanTagButton.Location = new System.Drawing.Point(12, 93);
             this.CleanTagButton.Name = "CleanTagButton";
             this.CleanTagButton.Size = new System.Drawing.Size(75, 23);
             this.CleanTagButton.TabIndex = 7;
@@ -263,8 +245,6 @@
             this.Controls.Add(this.ReadTagDataTypeComboBox);
             this.Controls.Add(this.CleanTagButton);
             this.Controls.Add(this.LogRichTextBox);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.ConnectIdTextBox);
             this.Controls.Add(this.DisconnectPLCButton);
             this.Controls.Add(this.ConnectPLCButton);
             this.Controls.Add(this.WriteTagButton);
@@ -296,8 +276,6 @@
         private Label label2;
         private Button ConnectPLCButton;
         private Button DisconnectPLCButton;
-        private TextBox ConnectIdTextBox;
-        private Label label3;
         private RichTextBox LogRichTextBox;
         private Button ReadTagButton;
         private TextBox ReadTagAddressTextBox;
