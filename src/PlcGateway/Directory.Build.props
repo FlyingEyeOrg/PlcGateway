@@ -61,7 +61,7 @@
 			如果开源，应该设置为Git仓库地址，例如：https://github.com/用户名/仓库名.git
 			配合<IncludeSource>true</IncludeSource>启用源代码调试时需要。
 		-->
-		<RepositoryUrl>none</RepositoryUrl>
+		<RepositoryUrl>https://github.com/FlyingEyeOrg/PlcGateway.git</RepositoryUrl>
 
 		<!--
 			源代码仓库类型。通常为git。
