@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using PlcGateway.Core;
 
 namespace NetworkInterfaceInfo
 {
@@ -12,6 +13,12 @@ namespace NetworkInterfaceInfo
     {
         static void Main(string[] args)
         {
+            var task = NetworkAddressScanner.TryScanAsync(IPAddress.Parse("111.63.65.247"));
+            task.Wait();
+            var result = task.Result;
+
+            Console.WriteLine("扫描地址：" + result ?? "empty");
+
             Console.OutputEncoding = Encoding.UTF8;
 
             Console.WriteLine("==================================================================");
