@@ -58,6 +58,7 @@
             this.HostIPTextBox.Name = "HostIPTextBox";
             this.HostIPTextBox.Size = new System.Drawing.Size(142, 21);
             this.HostIPTextBox.TabIndex = 0;
+            this.HostIPTextBox.Text = "192.168.0.8";
             // 
             // label1
             // 
@@ -74,6 +75,7 @@
             this.PLCIPTextBox.Name = "PLCIPTextBox";
             this.PLCIPTextBox.Size = new System.Drawing.Size(142, 21);
             this.PLCIPTextBox.TabIndex = 0;
+            this.PLCIPTextBox.Text = "192.168.0.6";
             // 
             // label2
             // 
