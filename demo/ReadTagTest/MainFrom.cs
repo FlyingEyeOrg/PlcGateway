@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Inovance.EtherNetIP.Native;
 using PlcGateway.Abstractions;
 using PlcGateway.Drivers.Inovance;
-using PlcGateway.Drivers.Inovance.Native;
+using PlcGateway.Drivers.Inovance.Data;
 
 namespace ReadTagTest
 {
@@ -22,20 +14,13 @@ namespace ReadTagTest
         public MainFrom()
         {
             InitializeComponent();
+            this.Load += MainFrom_Load;
         }
 
-        private void EipStartButton_Click(object sender, EventArgs e)
+        private void MainFrom_Load(object sender, EventArgs e)
         {
-            //var isOK = UnsafeNativeMethods.EipStartExt(this.HostIPTextBox.Text);
-
-            //if (isOK)
-            //{
-            //    Log("打开协议栈成功");
-            //}
-            //else
-            //{
-            //    Log("打开协议栈失败");
-            //}
+            this.ReadTagDataTypeComboBox.DataSource = Enum.GetValues(typeof(DataType));
+            this.WriteTagDataTypeComboBox.DataSource = Enum.GetValues(typeof(DataType));
         }
 
         private void ConnectPLCButton_Click(object sender, EventArgs e)
@@ -51,19 +36,6 @@ namespace ReadTagTest
                 this.Log("连接失败");
                 this.Log(ex.ToString());
             }
-
-            //var result = UnsafeNativeMethods.EipOpenConnection(this.PLCIPTextBox.Text, out var id);
-
-            //if (result != PlcGateway.Drivers.Inovance.Native.ErrorCode.SUCCESS)
-            //{
-            //    Log($"连接 PLC 失败：{result.ToString()}");
-            //    this.ConnectIdTextBox.Text = string.Empty;
-            //}
-            //else
-            //{
-            //    Log("连接 PLC 成功");
-            //    this.ConnectIdTextBox.Text = id.ToString();
-            //}
         }
 
         private void DisconnectPLCButton_Click(object sender, EventArgs e)
@@ -73,6 +45,7 @@ namespace ReadTagTest
                 try
                 {
                     _driver.Disconnect();
+                    _driver = null;
                     this.Log("断开成功！");
                 }
                 catch (Exception ex)
@@ -81,24 +54,6 @@ namespace ReadTagTest
                     this.Log(ex.ToString());
                 }
             }
-
-            //var result = UnsafeNativeMethods.EipCloseConnection(int.Parse(this.ConnectIdTextBox.Text));
-
-            //if (result != PlcGateway.Drivers.Inovance.Native.ErrorCode.SUCCESS)
-            //{
-            //    this.LogRichTextBox.Text += $"断开连接 PLC 失败：{result.ToString()}\n";
-            //}
-            //else
-            //{
-            //    this.LogRichTextBox.Text += "断开连接 PLC 成功\n";
-            //    this.ConnectIdTextBox.Text = string.Empty;
-            //}
-        }
-
-        private void EipStopButton_Click(object sender, EventArgs e)
-        {
-            //UnsafeNativeMethods.EipStop();
-            //this.LogRichTextBox.Text += "关闭协议栈成功\n";
         }
 
         private void ReadTagButton_Click(object sender, EventArgs e)
@@ -110,7 +65,11 @@ namespace ReadTagTest
 
             try
             {
-                var value = _driver.Read<float>(this.ReadTagAddressTextBox.Text);
+                var value = this.Read(this.ReadTagAddressTextBox.Text,
+                    (DataType)Enum.Parse(typeof(DataType), ReadTagDataTypeComboBox.Text));
+                this.Log($"读取标签：{this.ReadTagAddressTextBox.Text}");
+                this.Log($"数据类型：{ReadTagDataTypeComboBox.Text}");
+                this.Log($"标签数据：{value}");
             }
             catch (Exception ex)
             {
@@ -119,55 +78,35 @@ namespace ReadTagTest
             }
         }
 
-        //private void ReadTagButton_Click(object sender, EventArgs e)
-        //{
-        //    if (!this.UseReadTagExtCheckBox.Checked)
-        //    {
-        //        var tag = new ReadDataTag()
-        //        {
-        //            pName = this.ReadTagAddressTextBox.Text,
-        //            iElementCount = 1,
-        //        };
-        //        PlcGateway.Drivers.Inovance.Native.ErrorCode code
-        //            = UnsafeNativeMethods.EipReadTagExt2(int.Parse(this.ConnectIdTextBox.Text), ref tag, out var result);
+        private string Read(string address, DataType dataType)
+        {
+            if (_driver is null)
+            {
+                throw new Exception("未连接");
+            }
 
-        //        if (code == PlcGateway.Drivers.Inovance.Native.ErrorCode.SUCCESS)
-        //        {
-        //            this.Log("读取数据成功！");
-        //            this.Log($"数据：{BytesToHexString(result.GetData())}");
-        //            this.Log($"数据类型：{result.eType.ToString()}");
-        //            this.Log($"数据长度：{result.iDataLength.ToString()}");
-
-        //            UnsafeNativeMethods.DeleteTagListStru([result], 1);
-        //        }
-        //        else
-        //        {
-        //            this.Log($"读取数据失败：{code.ToString()}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        byte[] buffer = new byte[1400];
-        //        var code = UnsafeNativeMethods.EipReadTagExt(
-        //            int.Parse(this.ConnectIdTextBox.Text),
-        //            this.ReadTagAddressTextBox.Text,
-        //            out var tagType,
-        //            buffer,
-        //            1400, 1);
-
-        //        if (code > 0)
-        //        {
-        //            this.Log("读取数据成功！");
-        //            this.Log($"数据：{BytesToHexString(buffer.Take(code).ToArray())}");
-        //            this.Log($"数据类型：{tagType.ToString()}");
-        //            this.Log($"数据长度：{code.ToString()}");
-        //        }
-        //        else
-        //        {
-        //            this.Log($"读取数据失败：{(((ReadTagErrorCode)code)).ToString()}");
-        //        }
-        //    }
-        //}
+            return dataType switch
+            {
+                DataType.Boolean => _driver.Read<bool>(address).ToString(),
+                DataType.SByte => _driver.Read<sbyte>(address).ToString(),
+                DataType.Byte => _driver.Read<byte>(address).ToString(),
+                DataType.Int16 => _driver.Read<short>(address).ToString(),
+                DataType.UInt16 => _driver.Read<ushort>(address).ToString(),
+                DataType.Int32 => _driver.Read<int>(address).ToString(),
+                DataType.UInt32 => _driver.Read<uint>(address).ToString(),
+                DataType.Int64 => _driver.Read<long>(address).ToString(),
+                DataType.UInt64 => _driver.Read<ulong>(address).ToString(),
+                DataType.Single => _driver.Read<float>(address).ToString(),
+                DataType.Double => _driver.Read<double>(address).ToString(),
+                DataType.String => _driver.Read<string>(address).ToString(),
+                DataType.Bits8Bit => BytesToHexString(_driver.Read<Bits8Bit>(address).GetBytes()),
+                DataType.Bits16Bit => BytesToHexString(_driver.Read<Bits16Bit>(address).GetBytes()),
+                DataType.Bits32Bit => BytesToHexString(_driver.Read<Bits32Bit>(address).GetBytes()),
+                DataType.Bits64Bit => BytesToHexString(_driver.Read<Bits64Bit>(address).GetBytes()),
+                DataType.Structure => BytesToHexString(_driver.Read<Structure>(address).GetBytes()),
+                _ => throw new Exception("不支持类型")
+            };
+        }
 
         private void Log(string line)
         {
@@ -196,26 +135,49 @@ namespace ReadTagTest
 
         private void WriteTagButton_Click(object sender, EventArgs e)
         {
-            this.Log("该功能暂时不能使用");
-            return;
-
-            WriteDataTag tag = new WriteDataTag()
+            if (_driver == null)
             {
-                pName = this.WriteTagAddressTextBox.Text,
-                eType = PlcGateway.Drivers.Inovance.Native.TagType.TAG_TYPE_REAL,
-
-            };
-
-            var code = UnsafeNativeMethods.EipWriteTagExt2(int.Parse(this.ConnectIdTextBox.Text), ref tag);
-
-            if (code != PlcGateway.Drivers.Inovance.Native.ErrorCode.SUCCESS)
-            {
-                this.Log($"数据写入失败：{code.ToString()}");
+                return;
             }
-            else
+
+            try
             {
-                this.Log("数据写入成功");
+                Write(
+                    this.WriteTagAddressTextBox.Text,
+                    (DataType)Enum.Parse(typeof(DataType), WriteTagDataTypeComboBox.Text),
+                    WriteDataTextBox.Text);
             }
+            catch (Exception ex)
+            {
+                this.Log("写入失败");
+                this.Log(ex.ToString());
+            }
+        }
+
+        private void Write(string address, DataType dataType, string value)
+        {
+            if (_driver is null)
+            {
+                throw new Exception("未连接");
+            }
+
+            switch (dataType)
+            {
+                case DataType.Boolean: _driver.Write<bool>(address, bool.Parse(value)); break;
+                case DataType.SByte: _driver.Write<sbyte>(address, sbyte.Parse(value)); break;
+                case DataType.Byte: _driver.Write<byte>(address, byte.Parse(value)); break;
+                case DataType.Int16: _driver.Write<short>(address, short.Parse(value)); break;
+                case DataType.UInt16: _driver.Write<ushort>(address, ushort.Parse(value)); break;
+                case DataType.Int32: _driver.Write<int>(address, int.Parse(value)); break;
+                case DataType.UInt32: _driver.Write<uint>(address, uint.Parse(value)); break;
+                case DataType.Int64: _driver.Write<long>(address, long.Parse(value)); break;
+                case DataType.UInt64: _driver.Write<ulong>(address, ulong.Parse(value)); break;
+                case DataType.Single: _driver.Write<float>(address, float.Parse(value)); break;
+                case DataType.Double: _driver.Write<double>(address, double.Parse(value)); break;
+                case DataType.String: _driver.Write<string>(address, value); break;
+                default: throw new Exception("不支持类型");
+            }
+            ;
         }
 
         private void CleanTagButton_Click(object sender, EventArgs e)
