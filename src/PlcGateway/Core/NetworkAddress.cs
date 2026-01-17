@@ -3,7 +3,7 @@ using System.Net;
 
 namespace PlcGateway.Core
 {
-    internal static class NetworkAddress
+    public static class NetworkAddress
     {
         /// <summary>
         /// Gets the network address (subnet address) for a given IP and subnet mask

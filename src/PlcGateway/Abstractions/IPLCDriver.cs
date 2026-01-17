@@ -5,7 +5,7 @@ namespace PlcGateway.Abstractions
     /// <summary>
     /// 设备驱动
     /// </summary>
-    internal interface IPLCDriver : IDisposable
+    public interface IPLCDriver : IDisposable
     {
         /// <summary>
         /// 连接到设备
