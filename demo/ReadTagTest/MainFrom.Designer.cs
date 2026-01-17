@@ -50,6 +50,7 @@
             this.ReadTagDataTypeComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.WriteTagDataTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.CleanLogsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // HostIPTextBox
@@ -242,11 +243,22 @@
             this.WriteTagDataTypeComboBox.Size = new System.Drawing.Size(132, 20);
             this.WriteTagDataTypeComboBox.TabIndex = 8;
             // 
+            // CleanLogsButton
+            // 
+            this.CleanLogsButton.Location = new System.Drawing.Point(126, 381);
+            this.CleanLogsButton.Name = "CleanLogsButton";
+            this.CleanLogsButton.Size = new System.Drawing.Size(75, 23);
+            this.CleanLogsButton.TabIndex = 9;
+            this.CleanLogsButton.Text = "清空日志";
+            this.CleanLogsButton.UseVisualStyleBackColor = true;
+            this.CleanLogsButton.Click += new System.EventHandler(this.CleanLogsButton_Click);
+            // 
             // MainFrom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.CleanLogsButton);
             this.Controls.Add(this.WriteTagDataTypeComboBox);
             this.Controls.Add(this.ReadTagDataTypeComboBox);
             this.Controls.Add(this.CleanTagButton);
@@ -300,5 +312,6 @@
         private ComboBox ReadTagDataTypeComboBox;
         private Label label8;
         private ComboBox WriteTagDataTypeComboBox;
+        private Button CleanLogsButton;
     }
 }

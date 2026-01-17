@@ -184,5 +184,10 @@ namespace ReadTagTest
         {
             UnsafeNativeMethods.ResetTagInfo();
         }
+
+        private void CleanLogsButton_Click(object sender, EventArgs e)
+        {
+            this.LogRichTextBox.Text = "";
+        }
     }
 }
