@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
+		<TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<Platforms>AnyCPU;x64;x86</Platforms>
@@ -21,6 +21,10 @@
 		<Message Text="  RuntimeIdentifiers: $(RuntimeIdentifiers)" Importance="high" />
 		<Message Text="========================================" Importance="high" />
 	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="Beckhoff.TwinCAT.Ads" Version="7.0.132" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<!-- x64 DLLs 放到 win-x64 运行时目录 -->
