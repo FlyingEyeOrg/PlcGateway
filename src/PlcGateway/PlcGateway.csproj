@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;net472</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+	</PropertyGroup>
+
+	<Target Name="DisplayBuildInfo" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<Message Text="========================================" Importance="high" />
+		<Message Text="构建信息：" Importance="high" />
+		<Message Text="  项目文件: $(MSBuildProjectFile)" Importance="high" />
+		<Message Text="  目标框架: $(TargetFramework)" Importance="high" />
+		<Message Text="  平台: $(Platform)" Importance="high" />
+		<Message Text="  PlatformTarget: $(PlatformTarget)" Importance="high" />
+		<Message Text="  配置: $(Configuration)" Importance="high" />
+		<Message Text="  OutputPath: $(OutputPath)" Importance="high" />
+		<Message Text="  Prefer32Bit: $(Prefer32Bit)" Importance="high" />
+		<Message Text="  RuntimeIdentifier: $(RuntimeIdentifier)" Importance="high" />
+		<Message Text="  RuntimeIdentifiers: $(RuntimeIdentifiers)" Importance="high" />
+		<Message Text="========================================" Importance="high" />
+	</Target>
+
+	<ItemGroup>
+		<!-- x64 DLLs 放到 win-x64 运行时目录 -->
+		<None Update="libs\Inovance\x64\*.dll"
+			Condition="'$(Platform)' == 'AnyCPU' OR 
+		           '$(Platform)' == 'x64' OR 
+		           '$(Platform)' == ''">
+			<Visible>false</Visible>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+		</None>
+
+		<!-- x86 DLLs 放到 win-x86 运行时目录 -->
+		<None Update="libs\Inovance\x86\*.dll"
+			Condition="'$(Platform)' == 'x86'">
+			<Visible>false</Visible>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+		</None>
+	</ItemGroup>
+</Project>

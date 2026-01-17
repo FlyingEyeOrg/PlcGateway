@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NugetTest": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
