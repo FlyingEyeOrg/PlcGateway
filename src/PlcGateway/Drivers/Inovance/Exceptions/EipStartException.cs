@@ -1,11 +1,9 @@
-﻿using PlcGateway.Core.Exceptions;
-
-using static PlcGateway.Drivers.Inovance.InovanceErrorCode;
+﻿using static PlcGateway.Drivers.Inovance.InovanceErrorCode;
 
 namespace PlcGateway.Drivers.Inovance.Exceptions
 {
     public class EipStartException :
-                         UserFriendlyException
+                         InovanceException
     {
         public EipStartException(string address) : base(INOVANCE_EIP_START_ERROR, $"Failed to start EIP protocol stack for address: {address}. " +
                             "Possible reasons: " +

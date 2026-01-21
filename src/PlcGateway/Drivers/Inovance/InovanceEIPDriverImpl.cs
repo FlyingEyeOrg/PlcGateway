@@ -6,6 +6,7 @@ using Inovance.EtherNetIP.Native;
 using PlcGateway.Core.Exceptions;
 using PlcGateway.Drivers.Converter;
 using PlcGateway.Drivers.Inovance.Data;
+using PlcGateway.Drivers.Inovance.Exceptions;
 using PlcGateway.Drivers.Inovance.Native;
 
 using static PlcGateway.Drivers.Inovance.InovanceErrorCode;
@@ -53,7 +54,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = value.GetBytes();
@@ -61,7 +62,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -73,7 +74,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = value.GetBytes();
@@ -81,7 +82,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -93,7 +94,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = value.GetBytes();
@@ -101,7 +102,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -113,7 +114,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = value.GetBytes();
@@ -121,7 +122,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -133,7 +134,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = value.GetBytes();
@@ -141,7 +142,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -153,7 +154,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -161,7 +162,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -173,7 +174,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -181,7 +182,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write sbyte value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write sbyte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -193,7 +194,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = InovanceByteArrayConverter.ToMemberBytes(value);
@@ -201,7 +202,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write bool value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write bool value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -213,7 +214,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -221,7 +222,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write short value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write short value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -233,7 +234,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -241,7 +242,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -253,7 +254,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -261,7 +262,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write int value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write int value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -273,7 +274,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -281,7 +282,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -293,7 +294,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -301,7 +302,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write long value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write long value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -313,7 +314,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -321,7 +322,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -333,7 +334,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -341,7 +342,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write float value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write float value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -353,7 +354,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = BitConverter.GetBytes(value);
@@ -361,7 +362,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write double value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write double value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -373,7 +374,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var data = this.DefaultEncoding.GetBytes(value);
@@ -382,7 +383,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (code != NativeErrorCode.SUCCESS)
             {
-                throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write string value to tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_WRITE_ERROR, $"Failed to write string value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
                     .WithData("TagName", tagName)
                     .WithData("Value", value)
@@ -395,7 +396,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (!IsConnected)
             {
-                throw new BusinessException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
+                throw new InovanceException(INOVANCE_NOT_CONNECTED, "PLC is not connected. Call Connect() first.");
             }
 
             var buffer = new byte[TagDataMaxSize];
@@ -403,7 +404,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (size < 0)
             {
-                throw new BusinessException("PLC:ReadFailed", $"Failed to read tag '{tagName}'.",
+                throw new InovanceException("PLC:ReadFailed", $"Failed to read tag '{tagName}'.",
                     $"Error code: {size} (0x{size:X8})")
                     .WithData("TagName", tagName)
                     .WithData("ErrorCode", size);
@@ -415,7 +416,7 @@ namespace PlcGateway.Drivers.Inovance
             {
                 var actualType = TagTypeConverter.GetType(targetTag);
 
-                throw new BusinessException(INOVANCE_TYPE_MISMATCH,
+                throw new InovanceException(INOVANCE_TYPE_MISMATCH,
                     $"Tag type mismatch. Expected: {typeof(TValue).Name}, Actual: {actualType.Name}.")
                     .WithData("ExpectedType", typeof(TValue).FullName)
                     .WithData("ActualType", actualType.FullName)
@@ -433,27 +434,27 @@ namespace PlcGateway.Drivers.Inovance
             lock (_syncLock)
             {
                 if (_disposed)
-                    throw new BusinessException(INOVANCE_ALREADY_DISPOSED, "Driver instance has been disposed.")
+                    throw new InovanceException(INOVANCE_ALREADY_DISPOSED, "Driver instance has been disposed.")
                         .WithData("DriverType", nameof(InovanceEIPDriverImpl));
 
                 // 验证主机IP
                 if (string.IsNullOrWhiteSpace(HostIPAddress))
-                    throw new BusinessException(INOVANCE_INVALID_CONNECTION_PARAMETERS, "Host IP address cannot be null or empty.")
+                    throw new InovanceException(INOVANCE_INVALID_CONNECTION_PARAMETERS, "Host IP address cannot be null or empty.")
                         .WithData("Property", nameof(HostIPAddress));
 
                 if (!IPAddress.TryParse(HostIPAddress, out var hostIP))
-                    throw new BusinessException(INOVANCE_INVALID_CONNECTION_PARAMETERS,
+                    throw new InovanceException(INOVANCE_INVALID_CONNECTION_PARAMETERS,
                         $"Invalid host IP address format: '{HostIPAddress}'. Expected format: xxx.xxx.xxx.xxx")
                         .WithData("HostIPAddress", HostIPAddress!)
                         .WithData("Property", nameof(HostIPAddress));
 
                 // 验证设备IP
                 if (string.IsNullOrWhiteSpace(PLCIPAddress))
-                    throw new BusinessException(INOVANCE_INVALID_CONNECTION_PARAMETERS, "Device IP address cannot be null or empty.")
+                    throw new InovanceException(INOVANCE_INVALID_CONNECTION_PARAMETERS, "Device IP address cannot be null or empty.")
                         .WithData("Property", nameof(PLCIPAddress));
 
                 if (!IPAddress.TryParse(PLCIPAddress, out var deviceIP))
-                    throw new BusinessException(INOVANCE_INVALID_CONNECTION_PARAMETERS,
+                    throw new InovanceException(INOVANCE_INVALID_CONNECTION_PARAMETERS,
                         $"Invalid device IP address format: '{PLCIPAddress}'. Expected format: xxx.xxx.xxx.xxx")
                         .WithData("PLCIPAddress", PLCIPAddress!)
                         .WithData("Property", nameof(PLCIPAddress));
@@ -472,7 +473,7 @@ namespace PlcGateway.Drivers.Inovance
                     {
                         // 连接失败，清理并抛异常
                         EipProtocolStack.EipStop(hostIP);
-                        throw new BusinessException(INOVANCE_CONNECTION_ERROR,
+                        throw new InovanceException(INOVANCE_CONNECTION_ERROR,
                             $"Failed to connect to PLC at {deviceIP}.",
                             $"Error: {result} (0x{(int)result:X8}).")
                             .WithData("PLCIPAddress", PLCIPAddress!)
@@ -486,7 +487,7 @@ namespace PlcGateway.Drivers.Inovance
                     {
                         // 连接失败，清理并抛异常
                         EipProtocolStack.EipStop(hostIP);
-                        throw new BusinessException(INOVANCE_VERIFY_CONNECTION_FAILED,
+                        throw new InovanceException(INOVANCE_VERIFY_CONNECTION_FAILED,
                             $"Failed to connect to PLC at {deviceIP}.",
                             $"ConnectionState: {status} (0x{(int)status:X8}).")
                             .WithData("PLCIPAddress", PLCIPAddress!)
@@ -524,7 +525,7 @@ namespace PlcGateway.Drivers.Inovance
                     if (result != Native.NativeErrorCode.SUCCESS)
                     {
                         // 如果你想抛异常：
-                        throw new BusinessException(
+                        throw new InovanceException(
                             INOVANCE_DISCONNECTION_ERROR,
                             $"Failed to disconnect from PLC. Connection ID: {connectId}.",
                             $"Error: {result} (0x{(int)result:X8})")
@@ -533,10 +534,10 @@ namespace PlcGateway.Drivers.Inovance
                             .WithLogLevel(LogLevel.Warning);
                     }
                 }
-                catch (Exception ex) when (!(ex is BusinessException))
+                catch (Exception ex) when (!(ex is InovanceException))
                 {
                     // 原生方法抛异常
-                    throw new BusinessException(
+                    throw new InovanceException(
                        INOVANCE_DISCONNECTION_ERROR,
                         $"Error while disconnecting from PLC.",
                         $"Internal error: {ex.Message}")

@@ -1,5 +1,6 @@
 ﻿using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
+using PlcGateway.Drivers.Inovance.Exceptions;
 using PlcGateway.Drivers.Inovance.Native;
 using System;
 
@@ -52,7 +53,7 @@ namespace PlcGateway.Drivers.Inovance.Data
                 TagType.TAG_TYPE_STRUCT => TypeCache.Structure,
                 TagType.TAG_TYPE_BOOL => TypeCache.Bool,
                 TagType.TAG_TYPE_STRING => TypeCache.String,
-                _ => throw new BusinessException(
+                _ => throw new InovanceException(
                     code: INOVANCE_UNKNOWN_TAG_TYPE,
                     message: $"Unknown or unsupported TagType: {tagType}",
                     details: $"TagType value: {(int)tagType} (0x{(int)tagType:X}) | Supported range: 0-{(int)TagType.TAG_TYPE_STRING}"
@@ -85,7 +86,7 @@ namespace PlcGateway.Drivers.Inovance.Data
             if (TypeEquality<TTarget, bool>.AreSameType) return TagType.TAG_TYPE_BOOL;
             if (TypeEquality<TTarget, string>.AreSameType) return TagType.TAG_TYPE_STRING;
 
-            throw new BusinessException(
+            throw new InovanceException(
                  code: INOVANCE_UNKNOWN_TAG_TYPE,
                  message: $"Cannot convert type '{typeof(TTarget).Name}' to TagType",
                  details: $"Type: {typeof(TTarget).FullName} | Assembly: {typeof(TTarget).Assembly.GetName().Name}"

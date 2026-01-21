@@ -2,6 +2,7 @@
 using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
 using PlcGateway.Drivers.Inovance.Data;
+using PlcGateway.Drivers.Inovance.Exceptions;
 using System;
 using System.Net;
 using System.Text;
@@ -39,7 +40,7 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (value is null)
             {
-                throw new BusinessException(
+                throw new InovanceException(
                     code: INOVANCE_NULL_VALUE, "Value cannot be null.")
                     .WithData("Parameter", nameof(value))
                     .WithData("Address", address);
@@ -115,7 +116,7 @@ namespace PlcGateway.Drivers.Inovance
                 return (addr, val, drv) =>
                 {
                     var typeName = typeof(T).Name;
-                    throw new BusinessException(
+                    throw new InovanceException(
                         INOVANCE_UNSUPPORTED_TYPE, $"Type '{typeName}' is not supported.")
                         .WithData("Type", typeName)
                         .WithData("Address", addr)
