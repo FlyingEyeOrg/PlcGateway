@@ -8,6 +8,11 @@ namespace PlcGateway.Abstractions
     public interface IPLCDriver : IDisposable
     {
         /// <summary>
+        /// 是否连接 PLC
+        /// </summary>
+        public bool IsConnected { get; }
+
+        /// <summary>
         /// 连接到设备
         /// </summary>
         void Connect();

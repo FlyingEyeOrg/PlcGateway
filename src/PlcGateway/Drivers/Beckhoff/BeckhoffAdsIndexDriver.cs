@@ -12,6 +12,8 @@ namespace PlcGateway.Drivers.Beckhoff
     {
         private readonly BeckhoffAdsIndexDriverImpl _driver;
 
+        public bool IsConnected => _driver.IsConnected;
+
         public BeckhoffAdsIndexDriver(AmsNetId amsNetId, AmsPort port, Encoding defaultEncoding)
         {
             _driver = new BeckhoffAdsIndexDriverImpl(amsNetId, port, defaultEncoding);

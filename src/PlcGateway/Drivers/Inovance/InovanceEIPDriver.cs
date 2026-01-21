@@ -12,6 +12,8 @@ namespace PlcGateway.Drivers.Inovance
     {
         private readonly InovanceEIPDriverImpl _driver;
 
+        public bool IsConnected => _driver.IsConnected;
+
         public InovanceEIPDriver(IPAddress hostIPAddress, IPAddress plcIPAddress, Encoding encoding)
         {
             _driver = new InovanceEIPDriverImpl(hostIPAddress, plcIPAddress, encoding);
