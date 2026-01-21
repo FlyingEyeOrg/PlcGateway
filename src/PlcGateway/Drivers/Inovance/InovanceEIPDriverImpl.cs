@@ -59,7 +59,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = value.GetBytes();
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_STRUCT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -79,7 +79,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = value.GetBytes();
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_BYTE, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -99,7 +99,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = value.GetBytes();
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_WORD, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -119,7 +119,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = value.GetBytes();
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_DWORD, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -139,7 +139,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = value.GetBytes();
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_LWORD, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -159,7 +159,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_USINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write byte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -179,7 +179,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_SINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write sbyte value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -199,7 +199,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = InovanceByteArrayConverter.ToMemberBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_BOOL, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write bool value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -219,7 +219,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_INT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write short value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -239,7 +239,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_UINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ushort value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -259,7 +259,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_DINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write int value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -279,7 +279,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_UDINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write uint value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -299,7 +299,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_LINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write long value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -319,7 +319,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_ULINT, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write ulong value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -339,7 +339,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_REAL, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write float value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -359,7 +359,7 @@ namespace PlcGateway.Drivers.Inovance
             var data = BitConverter.GetBytes(value);
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_LREAL, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write double value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -380,7 +380,7 @@ namespace PlcGateway.Drivers.Inovance
             // 注意：这里应该是 TAG_TYPE_STRING 而不是 TAG_TYPE_LREAL
             var code = UnsafeNativeMethods.EipWriteTagExt(_connectId!.Value, tagName, TagType.TAG_TYPE_STRING, data, data.Length, 1);
 
-            if (code != ErrorCode.SUCCESS)
+            if (code != NativeErrorCode.SUCCESS)
             {
                 throw new BusinessException(INOVANCE_WRITE_ERROR, $"Failed to write string value to tag '{tagName}'.",
                     $"Error code: {code} (0x{(int)code:X8})")
@@ -468,7 +468,7 @@ namespace PlcGateway.Drivers.Inovance
                         deviceIP.ToString(),
                         out int connectId);
 
-                    if (result != Native.ErrorCode.SUCCESS)
+                    if (result != Native.NativeErrorCode.SUCCESS)
                     {
                         // 连接失败，清理并抛异常
                         EipProtocolStack.EipStop(hostIP);
@@ -521,7 +521,7 @@ namespace PlcGateway.Drivers.Inovance
                 {
                     var result = UnsafeNativeMethods.EipCloseConnection(connectId);
 
-                    if (result != Native.ErrorCode.SUCCESS)
+                    if (result != Native.NativeErrorCode.SUCCESS)
                     {
                         // 如果你想抛异常：
                         throw new BusinessException(

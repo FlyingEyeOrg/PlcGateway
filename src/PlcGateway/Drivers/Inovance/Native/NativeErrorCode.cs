@@ -1,6 +1,6 @@
 ﻿namespace PlcGateway.Drivers.Inovance.Native
 {
-    internal enum ErrorCode : int
+    internal enum NativeErrorCode : int
     {
         ERR_EIP_STOPED = -2,                              //协议栈未开启
         OTHER_ERROR = -1,                                 //其他错误   

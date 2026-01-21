@@ -34,7 +34,7 @@ namespace Inovance.EtherNetIP.Native
         /// <param name="iInstanceID">需关闭的实例ID</param>
         /// <returns>成功返回SUCCESS，失败返回ERROR_NO类型对应的错误码</returns>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern ErrorCode EipCloseConnection(int iInstanceID);
+        public static extern NativeErrorCode EipCloseConnection(int iInstanceID);
 
         /// <summary>
         /// 序号：5
@@ -58,7 +58,7 @@ namespace Inovance.EtherNetIP.Native
         /// 调用后阻塞等待协议栈创建连接完成，连接完成后返回。
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipOpenConnection(
+        internal static extern NativeErrorCode EipOpenConnection(
             [MarshalAs(UnmanagedType.LPStr)] string pIpAddress,
             out int pInstanceID
         );
@@ -160,7 +160,7 @@ namespace Inovance.EtherNetIP.Native
         /// 2. 注意，调用此接口读取成功后需调用 DeleteTagListStru() 释放内存。
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ErrorCode EipReadTagExt2(
+        internal static extern NativeErrorCode EipReadTagExt2(
             int iInstanceID,
             [In] ref ReadDataTag readDataTag,
             [Out] out ReadDataResult readValueResult
@@ -176,15 +176,15 @@ namespace Inovance.EtherNetIP.Native
         /// <param name="pReadDataTag">标签列表指针，包含要读取的标签信息数组</param>
         /// <param name="pReadDataResult">返回的标签数据列表指针，用于接收读取结果数组</param>
         /// <returns>
-        /// 成功：<see cref="ErrorCode.SUCCESS"/>
-        /// 失败：返回<see cref="ErrorCode"/>类型对应的错误码
+        /// 成功：<see cref="NativeErrorCode.SUCCESS"/>
+        /// 失败：返回<see cref="NativeErrorCode"/>类型对应的错误码
         /// </returns>
         /// <remarks>
         /// 此方法用于批量读取多个标签的值，支持数组和结构体元素的访问。
         /// 需要预先创建标签信息数组和结果数组，数组大小必须与 iNumOfTags 一致。
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ErrorCode EipReadTagList(
+        internal static extern NativeErrorCode EipReadTagList(
             int iInstanceID,
             uint iNumOfTags,
             [In] ReadDataTag[] pReadDataTag,
@@ -208,8 +208,8 @@ namespace Inovance.EtherNetIP.Native
         /// 默认值为 false。
         /// </param>
         /// <returns>
-        /// 成功：<see cref="ErrorCode.SUCCESS"/>
-        /// 失败：返回<see cref="ErrorCode"/>类型对应的错误码
+        /// 成功：<see cref="NativeErrorCode.SUCCESS"/>
+        /// 失败：返回<see cref="NativeErrorCode"/>类型对应的错误码
         /// </returns>
         /// <remarks>
         /// <para>此方法用于批量读取多个标签的值，是 <see cref="EipReadTagList"/> 的扩展版本，提供更灵活的标签名解析功能。</para>
@@ -276,7 +276,7 @@ namespace Inovance.EtherNetIP.Native
         /// </code>
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipReadTagListExt(
+        internal static extern NativeErrorCode EipReadTagListExt(
             int iInstanceID,
             uint iNumOfTags,
             [In] ReadDataTag[] pReadDataTag,
@@ -291,7 +291,7 @@ namespace Inovance.EtherNetIP.Native
         /// 区别是：接口返回协议原始数据（BOOL数组在协议中的排列方式见使用说明文档）
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipReadTagListRaw(
+        internal static extern NativeErrorCode EipReadTagListRaw(
            int iInstanceID,
            uint iNumOfTags,
            [In] ReadDataTag[] pReadDataTag,
@@ -309,7 +309,7 @@ namespace Inovance.EtherNetIP.Native
         /// TagRetValue * pDest);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipReadTagListWithAlignment(
+        internal static extern NativeErrorCode EipReadTagListWithAlignment(
               int iInstanceID,
               uint iNumOfTags,
               AlignType eAlignType,
@@ -323,7 +323,7 @@ namespace Inovance.EtherNetIP.Native
         /// 读取标签值。接口说明同EipReadTagExt2()，区别是：接口返回协议原始数据（BOOL数组在协议中的排列方式见使用说明文档）
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipReadTagRaw(
+        internal static extern NativeErrorCode EipReadTagRaw(
             int iInstanceID,
             uint iNumOfTags,
             [In] ref ReadDataTag pReadDataTag,
@@ -337,7 +337,7 @@ namespace Inovance.EtherNetIP.Native
         /// extern "C" __declspec(dllexport) ERROR_NO EipReadTagWithAlignment(int iInstanceID, TAG_AlignType eAlignType, TagReadDataBase * pTagReadData, TagRetValue * pTagDest);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipReadTagWithAlignment(
+        internal static extern NativeErrorCode EipReadTagWithAlignment(
             int iInstanceID,
             AlignType eAlignType,
             [In] ref ReadDataTag pReadDataTag,
@@ -421,11 +421,11 @@ namespace Inovance.EtherNetIP.Native
         /// <param name="iElementCount">请求写入的元素个数（针对数组类型，默认1）</param>
         /// <param name="iArrayPos">从数组指定位置开始写入（针对数组类型，默认-1表示不指定位置）</param>
         /// <returns>
-        /// 成功：<see cref="ErrorCode.SUCCESS"/>
+        /// 成功：<see cref="NativeErrorCode.SUCCESS"/>
         /// 失败：返回对应的错误码
         /// </returns>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTag(
+        internal static extern NativeErrorCode EipWriteTag(
            int iInstanceID,
            [MarshalAs(UnmanagedType.LPStr)] string pTagName,
            TagType pType,
@@ -451,7 +451,7 @@ namespace Inovance.EtherNetIP.Native
         /// unsigned short iElementCount = 1);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagExt(
+        internal static extern NativeErrorCode EipWriteTagExt(
            int iInstanceID,
            [MarshalAs(UnmanagedType.LPStr)] string pTagName,
            TagType eType,
@@ -479,7 +479,7 @@ namespace Inovance.EtherNetIP.Native
         /// 说明：发起请求时会先扫描标签信息，接口可不填数据类型参数 eType，内部会通过扫描获取。
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ErrorCode EipWriteTagExt2(
+        internal static extern NativeErrorCode EipWriteTagExt2(
             int iInstanceID,
             [In] ref WriteDataTag pWriteDataTag
         );
@@ -490,7 +490,7 @@ namespace Inovance.EtherNetIP.Native
         /// extern "C" __declspec(dllexport) ERROR_NO EipWriteTagExt3(int iInstanceID, const char* pName, unsigned char* pData, int iDataLength, int iElementCount);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ErrorCode EipWriteTagExt3(
+        internal static extern NativeErrorCode EipWriteTagExt3(
             int iInstanceID,
             [MarshalAs(UnmanagedType.LPStr)] string pTagName,
             byte[] pData,
@@ -507,8 +507,8 @@ namespace Inovance.EtherNetIP.Native
         /// <param name="iNumOfTags">标签个数</param>
         /// <param name="pWriteDataTag">写入的标签数据数组指针，包含要写入的标签信息</param>
         /// <returns>
-        /// 成功：<see cref="ErrorCode.SUCCESS"/>
-        /// 失败：返回<see cref="ErrorCode"/>类型对应的错误码
+        /// 成功：<see cref="NativeErrorCode.SUCCESS"/>
+        /// 失败：返回<see cref="NativeErrorCode"/>类型对应的错误码
         /// </returns>
         /// <remarks>
         /// 此方法用于批量写入多个标签的值，支持数组和结构体元素的访问。
@@ -516,7 +516,7 @@ namespace Inovance.EtherNetIP.Native
         /// 注意：调用此方法后，WriteDataTag 结构体中的非托管内存需要手动释放。
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern ErrorCode EipWriteTagList(
+        internal static extern NativeErrorCode EipWriteTagList(
             int iInstanceID,
             uint iNumOfTags,
             [In] WriteDataTag[] pWriteDataTag
@@ -538,8 +538,8 @@ namespace Inovance.EtherNetIP.Native
         /// 默认值为 false。
         /// </param>
         /// <returns>
-        /// 成功：<see cref="ErrorCode.SUCCESS"/>
-        /// 失败：返回<see cref="ErrorCode"/>类型对应的错误码
+        /// 成功：<see cref="NativeErrorCode.SUCCESS"/>
+        /// 失败：返回<see cref="NativeErrorCode"/>类型对应的错误码
         /// </returns>
         /// <remarks>
         /// <para>此方法用于批量写入多个标签的值，是 <see cref="EipWriteTagList"/> 的扩展版本，提供更灵活的标签名解析功能。</para>
@@ -618,7 +618,7 @@ namespace Inovance.EtherNetIP.Native
         /// </code>
         /// </remarks>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagListExt(
+        internal static extern NativeErrorCode EipWriteTagListExt(
             int iInstanceID,
             uint iNumOfTags,
             [In] WriteDataTag[] pWriteDataTag,
@@ -631,7 +631,7 @@ namespace Inovance.EtherNetIP.Native
         /// extern "C" __declspec(dllexport) ERROR_NO EipWriteTagListRaw(int iInstanceID, unsigned int iNumOfTags, TagWriteDataBase* pTagWritenData);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagListRaw(
+        internal static extern NativeErrorCode EipWriteTagListRaw(
             int iInstanceID,
             uint iNumOfTags,
             [In] WriteDataTag[] pWriteDataTag
@@ -646,7 +646,7 @@ namespace Inovance.EtherNetIP.Native
         /// TagWriteDataBase* pTagWritenData);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagListWithAlignment(
+        internal static extern NativeErrorCode EipWriteTagListWithAlignment(
             int iInstanceID,
             uint iNumOfTags,
             AlignType eAlignType,
@@ -660,7 +660,7 @@ namespace Inovance.EtherNetIP.Native
         /// extern "C" __declspec(dllexport) ERROR_NO EipWriteTagRaw(int iInstanceID, TagWriteDataBase * pTagWritenData);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagRaw(
+        internal static extern NativeErrorCode EipWriteTagRaw(
             int iInstanceID,
             [In] ref WriteDataTag pWriteDataTag
         );
@@ -672,7 +672,7 @@ namespace Inovance.EtherNetIP.Native
         /// extern "C" __declspec(dllexport) ERROR_NO EipWriteTagWithAlignment(int iInstanceID, TAG_AlignType eAlignType, TagWriteDataBase * pTagWritenData);
         /// </summary>
         [DllImport("EipTagSimple.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        internal static extern ErrorCode EipWriteTagWithAlignment(
+        internal static extern NativeErrorCode EipWriteTagWithAlignment(
             int iInstanceID,
             AlignType eAlignType,
             [In] ref WriteDataTag pWriteDataTag
