@@ -1,5 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Core.Exceptions;
+using System.Runtime.CompilerServices;
+using static PlcGateway.Core.ErrorCode;
 
 namespace PlcGateway.Core.Converter
 {
@@ -9,7 +10,7 @@ namespace PlcGateway.Core.Converter
         {
             if (!TypeEquality<TSource, TTarget>.AreSameType)
             {
-                throw new BusinessException("TYPE_MISMATCH",
+                throw new BusinessException(SELF_CONVERTER_TYPE_MISMATCH,
                  $"Cannot convert from '{typeof(TSource).Name}' to '{typeof(TTarget).Name}'. Types must be identical.",
                  $"Source: {typeof(TSource).FullName} | Target: {typeof(TTarget).FullName} | Assembly: {typeof(TSource).Assembly.GetName().Name}");
             }
