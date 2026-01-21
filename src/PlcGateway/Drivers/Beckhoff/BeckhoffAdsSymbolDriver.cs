@@ -6,7 +6,7 @@ using System.Text;
 using TwinCAT.Ads;
 
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
-using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
 {

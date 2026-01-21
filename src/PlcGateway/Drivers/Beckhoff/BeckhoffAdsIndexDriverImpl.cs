@@ -5,7 +5,7 @@ using PlcGateway.Drivers.Converter;
 using TwinCAT.Ads;
 
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
-using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
 {
@@ -23,7 +23,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -37,7 +37,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -51,7 +51,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -65,7 +65,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -79,7 +79,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -93,7 +93,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -107,7 +107,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -121,7 +121,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -135,7 +135,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -149,7 +149,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -163,7 +163,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -179,7 +179,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, bytes);
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -234,7 +234,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var size = SizeOf<TValue>.Value;
             var result = this.AdsClient.ReadAsResult(address.IndexGroup, address.IndexOffset, size);
 
-            if (result.ErrorCode != AdsErrorCode.NoError)
+            if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_READ_ERROR,
@@ -261,7 +261,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var result = this.AdsClient.ReadAsResult(address.IndexGroup, address.IndexOffset, address.DataLength);
 
-            if (result.ErrorCode != AdsErrorCode.NoError)
+            if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_READ_ERROR,

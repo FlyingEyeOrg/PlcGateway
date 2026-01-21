@@ -3,7 +3,7 @@ using PlcGateway.Core.Exceptions;
 using PlcGateway.Drivers.Inovance.Data;
 using System;
 using System.Text;
-using static PlcGateway.Drivers.DriverErrorCode;
+using static PlcGateway.Drivers.ErrorCode;
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
 using InovanceData = PlcGateway.Drivers.Inovance.Data;
 
@@ -99,7 +99,7 @@ namespace PlcGateway.Drivers.Converter
             #endregion
 
             return (bytes, _) => throw new BusinessException(
-                code: DRIVER_BYTE_ARRAY_CONVERTER_UNSUPPORTED_TYPE,
+                code: BYTE_ARRAY_CONVERTER_UNSUPPORTED_TYPE,
                 message: $"Unsupported data type: {typeof(TTarget).FullName}",
                 details: "Cannot convert bytes to the specified type"
             );

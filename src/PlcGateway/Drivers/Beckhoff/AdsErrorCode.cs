@@ -3,7 +3,7 @@
     /// <summary>
     /// 倍福错误码
     /// </summary>
-    public static class BeckhoffErrorCode
+    public static class AdsErrorCode
     {
         public const string ADS_INVALID_INDICES_FORMAT = "ADS_INVALID_INDICES_FORMAT";
 

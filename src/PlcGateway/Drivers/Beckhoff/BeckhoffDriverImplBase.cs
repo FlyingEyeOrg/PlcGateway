@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 using TwinCAT.Ads;
-using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
 {
@@ -229,7 +229,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
         }
 
-        protected string GetAdsErrorMessage(AdsErrorCode errorCode)
+        protected string GetAdsErrorMessage(TwinCAT.Ads.AdsErrorCode errorCode)
         {
             return errorCode.ToMessage();
         }

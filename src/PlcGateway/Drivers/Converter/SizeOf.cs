@@ -1,6 +1,6 @@
 ﻿using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
-using static PlcGateway.Drivers.DriverErrorCode;
+using static PlcGateway.Drivers.ErrorCode;
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
 
 namespace PlcGateway.Drivers.Converter
@@ -47,7 +47,7 @@ namespace PlcGateway.Drivers.Converter
             var fullTypeName = typeof(T).FullName;
 
             throw new BusinessException(
-                code: DRIVER_SIZE_OF_UNSUPPORTED_TYPE,
+                code: SIZE_OF_UNSUPPORTED_TYPE,
                 message: $"Unsupported data type: {typeName}",
                 details: $"Type '{fullTypeName}' is not supported. See TypeSize<T> class for supported types."
             );

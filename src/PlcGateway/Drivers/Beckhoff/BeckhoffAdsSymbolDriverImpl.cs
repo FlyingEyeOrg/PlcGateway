@@ -6,7 +6,7 @@ using System.Text;
 using TwinCAT;
 using TwinCAT.Ads;
 using TwinCAT.Ads.TypeSystem;
-using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
 
 namespace PlcGateway.Drivers.Beckhoff
@@ -86,7 +86,7 @@ namespace PlcGateway.Drivers.Beckhoff
             // Second attempt: Try to read symbol directly from PLC
             var errorCode = this.AdsClient.TryReadSymbol(normalizedPath, out var newSymbol);
 
-            if (errorCode != AdsErrorCode.NoError)
+            if (errorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_SYMBOL_NOT_FOUND,
@@ -118,7 +118,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var loader = SymbolLoaderFactory.Create(this.AdsClient, SymbolLoaderSettings.Default);
             var resultSymbols = loader.GetSymbols();
 
-            if (resultSymbols.ErrorCode != AdsErrorCode.NoError)
+            if (resultSymbols.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_SYMBOL_LOAD_FAILED,
@@ -177,7 +177,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -192,7 +192,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -207,7 +207,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -222,7 +222,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -237,7 +237,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -252,7 +252,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -267,7 +267,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -282,7 +282,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -297,7 +297,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -312,7 +312,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -327,7 +327,7 @@ namespace PlcGateway.Drivers.Beckhoff
             var symbol = GetSymbol(instancePath);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -345,7 +345,7 @@ namespace PlcGateway.Drivers.Beckhoff
             byte[] bytes = this.Encoding.GetBytes(value);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, bytes);
 
-            if (code != AdsErrorCode.NoError)
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_WRITE_ERROR,
@@ -412,7 +412,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             var result = this.AdsClient.ReadAsResult(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
 
-            if (result.ErrorCode != AdsErrorCode.NoError)
+            if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
                 throw new BusinessException(
                     code: ADS_READ_ERROR,

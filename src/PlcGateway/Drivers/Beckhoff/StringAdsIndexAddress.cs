@@ -3,7 +3,7 @@ using PlcGateway.Core.Exceptions;
 using System;
 using System.Text.RegularExpressions;
 
-using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
 {
