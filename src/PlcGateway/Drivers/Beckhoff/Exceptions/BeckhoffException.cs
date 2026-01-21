@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace PlcGateway.Drivers.Beckhoff.Exceptions
 {
     /// <summary>
-    /// 汇川PLC驱动异常
+    /// 倍福PLC驱动异常
     /// </summary>
     [Serializable]
     public class BeckhoffException : BusinessException
