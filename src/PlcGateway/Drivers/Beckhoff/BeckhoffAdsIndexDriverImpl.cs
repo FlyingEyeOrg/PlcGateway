@@ -231,7 +231,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public TValue Read<TValue>(AdsIndexAddress address)
         {
-            var size = TypeSize<TValue>.Value;
+            var size = SizeOf<TValue>.Value;
             var result = this.AdsClient.ReadAsResult(address.IndexGroup, address.IndexOffset, size);
 
             if (result.ErrorCode != AdsErrorCode.NoError)

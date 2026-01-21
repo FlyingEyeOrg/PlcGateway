@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using PlcGateway.Core.Converter;
+﻿using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
+using static PlcGateway.Core.ErrorCode;
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
 
 namespace PlcGateway.Drivers.Converter
@@ -10,7 +10,7 @@ namespace PlcGateway.Drivers.Converter
     /// 每个泛型类型 T 在静态构造函数中计算大小并缓存
     /// </summary>
     /// <typeparam name="T">要检查的类型</typeparam>
-    internal static class TypeSize<T>
+    internal static class SizeOf<T>
     {
         /// <summary>
         /// 类型的大小（字节数）
@@ -47,7 +47,7 @@ namespace PlcGateway.Drivers.Converter
             var fullTypeName = typeof(T).FullName;
 
             throw new BusinessException(
-                code: "UNSUPPORTED_TYPE",
+                code: SIZE_OF_UNSUPPORTED_TYPE,
                 message: $"Unsupported data type: {typeName}",
                 details: $"Type '{fullTypeName}' is not supported. See TypeSize<T> class for supported types."
             );

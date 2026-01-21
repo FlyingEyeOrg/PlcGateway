@@ -398,7 +398,7 @@ namespace PlcGateway.Drivers.Beckhoff
         public TValue Read<TValue>(string instancePath)
         {
             var symbol = GetSymbol(instancePath);
-            var size = TypeSize<TValue>.Value;
+            var size = SizeOf<TValue>.Value;
 
             if (size != symbol.Size)
             {
