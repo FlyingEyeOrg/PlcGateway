@@ -1,0 +1,172 @@
+﻿<Project>
+	<PropertyGroup>
+		<!--
+			包的唯一标识符。在NuGet.org上必须是唯一的。
+			命名约定通常为：公司/组织.产品名.组件名
+			示例：Contoso.Industrial.PlcGateway
+		-->
+		<PackageId>PlcGateway</PackageId>
+
+		<!--
+			包版本。遵循语义化版本控制(SemVer)规范。
+			格式：主版本.次版本.修订号[-预发布标签][+构建元数据]
+			示例：1.0.0-beta.1 表示第一个beta预发布版本
+			示例：1.0.0-alpha.2 表示第二个alpha预发布版本
+			示例：1.0.0-rc.1 表示第一个发布候选版本
+			示例：1.0.0 表示稳定版本
+		-->
+		<PackageVersion>1.0.0-rc</PackageVersion>
+
+		<!--
+			包的用户友好显示名称。会在NuGet包管理器界面中显示。
+			应该清晰描述包的用途，支持中文。
+		-->
+		<Title>PLC 网关</Title>
+
+		<!--
+			包作者列表。多个作者用分号(;)分隔。
+			会在NuGet包详情页显示。
+		-->
+		<Authors>LannoxLan</Authors>
+
+		<!--
+			包图标文件名。图标文件需要放在项目根目录。
+			图标要求：推荐64x64像素PNG，透明背景
+			图标文件需通过<None Include="icon.png" Pack="true" PackagePath=""/>包含
+		-->
+		<PackageIcon>icon.png</PackageIcon>
+
+		<!--
+			自述文件(README)文件名。文件需放在项目根目录。
+			会在NuGet包详情页显示完整的README内容。
+			推荐使用Markdown格式(.md)。
+		-->
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+
+		<!--
+			是否包含调试符号。设置为true会生成.snupkg符号包。
+			符号包包含PDB文件，支持源代码调试和异常堆栈跟踪。
+		-->
+		<IncludeSymbols>true</IncludeSymbols>
+
+		<!--
+			是否在符号包中包含源代码。
+			设置为true时，用户可以在调试时进入包的源代码。
+			需要配合SourceLink使用效果更佳。
+		-->
+		<IncludeSource>true</IncludeSource>
+
+		<!--
+			源代码仓库URL。设置为"none"表示不公开仓库。
+			如果开源，应该设置为Git仓库地址，例如：https://github.com/用户名/仓库名.git
+			配合<IncludeSource>true</IncludeSource>启用源代码调试时需要。
+		-->
+		<RepositoryUrl>https://github.com/FlyingEyeOrg/PlcGateway.git</RepositoryUrl>
+
+		<!--
+			源代码仓库类型。通常为git。
+			可选值：git, svn, tfs, mercurial
+		-->
+		<RepositoryType>git</RepositoryType>
+
+		<!--
+			包的详细描述。这是NuGet包最重要的元数据之一。
+			好的描述应该包含：
+			1. 包的主要功能
+			2. 适用场景
+			3. 主要特性
+			4. 支持的平台/框架
+			5. 基本用法示例
+			
+			注意：描述会显示在NuGet包详情页，影响用户下载决策。
+			保持简洁明了，但信息完整。
+		-->
+		<Description>
+PlcGateway 是一个功能强大、易于使用的工业自动化PLC通信网关库。
+
+核心特性：
+• 多品牌支持：汇川(Inovance)、西门子(Siemens)、罗克韦尔(Allen-Bradley)、三菱(Mitsubishi)等
+• 多协议支持：Modbus TCP/RTU、S7、EtherNet/IP、MC协议等
+• 统一API：为不同品牌PLC提供一致的编程接口
+• 高性能：异步通信、连接池、数据批量读写优化
+• 可扩展：易于添加新的PLC品牌支持
+• 企业级：支持依赖注入、配置化、监控、日志
+
+主要功能：
+• 实时数据读写：支持Bool、Byte、Int16、Int32、Float、Double、String等数据类型
+• 批量操作：支持批量读写，减少通信开销
+• 连接管理：自动重连、连接池、心跳检测
+• 错误处理：完善的异常处理机制
+• 扩展性：支持自定义数据转换器、协议扩展
+
+目标框架：
+• .NET 6.0+、.NET 7.0+、.NET 8.0+
+• .NET Standard 2.0+（兼容.NET Framework 4.6.1+）
+
+典型应用场景：
+• MES（制造执行系统）
+• SCADA（数据采集与监控系统）
+• 工业物联网平台
+• 设备数据采集
+• 生产线监控
+
+快速开始：
+1. 安装：dotnet add package PlcGateway
+2. 配置：services.AddPlcGateway().AddSiemensDriver();
+3. 使用：await client.ReadFloatAsync("DB1.DBD0");
+
+许可证：MIT
+支持：GitHub Issues 或 邮箱支持
+		</Description>
+
+		<!--
+			版权声明。通常包含年份和版权所有者。
+			格式通常为：© 年份 所有者。保留所有权利。
+			如果使用开源许可证，这里声明版权所有者。
+		-->
+		<Copyright>
+			© 2024 LannoxLan. 保留所有权利。
+
+			注意：本软件基于MIT许可证分发。
+			用户可以自由使用、复制、修改、合并、出版发行、散布、再授权及贩售，
+			但必须在所有副本中包含上述版权声明和本许可声明。
+
+			免责声明：
+			本软件按"原样"提供，不提供任何形式的明示或暗示担保，包括但不限于
+			对适销性、特定用途适用性和非侵权的保证。在任何情况下，
+			作者或版权持有人均不对因使用本软件引起的任何索赔、损害或其他责任
+			承担责任，无论是在合同、侵权或其他方面。
+
+			工业安全提示：
+			本库为工业自动化通信提供支持，使用者应：
+			1. 在生产环境使用前充分测试
+			2. 确保通信安全，防止未授权访问
+			3. 遵循设备制造商的安全指南
+			4. 对关键操作添加额外安全验证
+			5. 定期备份配置和数据
+
+			联系方式：
+			• 作者：LannoxLan
+			• 邮箱：support@plc-gateway.com
+			• 项目主页：https://github.com/LannoxLan/PlcGateway
+			• 文档：https://plcgateway.readthedocs.io
+		</Copyright>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="readme.md" Pack="true" PackagePath="\"></None>
+		<None Include="images\icon.png" Pack="true" PackagePath="\"></None>
+		<!-- x64 DLLs 放到 win-x64 运行时目录 -->
+		<Content Include="libs\Inovance\x64\*.dll">
+			<Pack>true</Pack>
+			<!-- 放到 win-x64 运行时目录 -->
+			<PackagePath>runtimes\win-x64\native\%(Filename)%(Extension)</PackagePath>
+		</Content>
+		<!-- x86 DLLs 放到 win-x86 运行时目录 -->
+		<Content Include="libs\Inovance\x86\*.dll">
+			<Pack>true</Pack>
+			<!-- 放到 win-x86 运行时目录 -->
+			<PackagePath>runtimes\win-x86\native\%(Filename)%(Extension)</PackagePath>
+		</Content>
+	</ItemGroup>
+</Project>

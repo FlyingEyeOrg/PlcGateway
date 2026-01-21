@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<Platforms>AnyCPU;x64;x86</Platforms>
+		<CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Beckhoff.TwinCAT.Ads" Version="7.0.132" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- x64 DLLs 放到 win-x64 运行时目录 -->
+		<None Update="libs\Inovance\x64\*.dll" Condition="'$(Platform)' == 'AnyCPU' OR '$(Platform)' == 'x64' OR '$(Platform)' == ''">
+			<Visible>false</Visible>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+		</None>
+
+		<!-- x86 DLLs 放到 win-x86 运行时目录 -->
+		<None Update="libs\Inovance\x86\*.dll" Condition="'$(Platform)' == 'x86'">
+			<Visible>false</Visible>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+		</None>
+	</ItemGroup>
+
+</Project>

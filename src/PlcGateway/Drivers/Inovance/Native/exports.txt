@@ -1,0 +1,59 @@
+﻿Microsoft (R) COFF/PE Dumper Version 14.44.35221.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file EipTagSimple.dll
+
+File Type: DLL
+
+  Section contains the following exports for EipTagSimple.dll
+
+    00000000 characteristics
+    FFFFFFFF time date stamp
+        0.00 version
+           1 ordinal base
+          32 number of functions
+          32 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00004E10 DeleteTagListStru
+          2    1 000020C0 EipClaimAllHostIPAddress
+          3    2 00002010 EipClaimHostIPAddress
+          4    3 00002530 EipCloseConnection
+          5    4 00004DF0 EipGetConnectionState
+          6    5 00002260 EipOpenConnection
+          7    6 00002780 EipReadTag
+          8    7 00002B20 EipReadTagExt
+          9    8 00006730 EipReadTagExt2
+         10    9 00002F00 EipReadTagList
+         11    A 00003470 EipReadTagListExt
+         12    B 0000A6E0 EipReadTagListRaw
+         13    C 0000DEC0 EipReadTagListWithAlignment
+         14    D 00009580 EipReadTagRaw
+         15    E 0000CC50 EipReadTagWithAlignment
+         16    F 00001EF0 EipStart
+         17   10 00001F40 EipStartExt
+         18   11 00001FB0 EipStartProtocol
+         19   12 00002140 EipStop
+         20   13 00002100 EipUnclaimAllHostIPAddress
+         21   14 00002070 EipUnclaimHostIPAddress
+         22   15 000039E0 EipWriteTag
+         23   16 00003D20 EipWriteTagExt
+         24   17 00007020 EipWriteTagExt2
+         25   18 0000C390 EipWriteTagExt3
+         26   19 00004150 EipWriteTagList
+         27   1A 00004750 EipWriteTagListExt
+         28   1B 0000B630 EipWriteTagListRaw
+         29   1C 0000EBF0 EipWriteTagListWithAlignment
+         30   1D 00009E20 EipWriteTagRaw
+         31   1E 0000D5D0 EipWriteTagWithAlignment
+         32   1F 00007900 ResetTagInfo
+
+  Summary
+
+        1000 .data
+        2000 .rdata
+        1000 .reloc
+        1000 .rsrc
+       13000 .text

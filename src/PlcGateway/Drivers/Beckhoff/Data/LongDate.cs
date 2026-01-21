@@ -1,0 +1,74 @@
+﻿using System;
+using PlcGateway.Core.Exceptions;
+
+namespace PlcGateway.Drivers.Beckhoff.Data
+{
+    public readonly struct LongDate
+    {
+        public const int Size = sizeof(ulong);
+        private const long TicksPerNanosecond = 100; // 1 tick = 100 nanoseconds
+        private static readonly System.DateTime DateBase = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+
+        public const ulong MaxValue = ulong.MaxValue; // 单位：纳秒
+        public static readonly System.DateTime MaxDateTime =
+            DateBase + System.TimeSpan.FromTicks((long)(MaxValue / TicksPerNanosecond));
+
+        public ulong Value { get; } // 单位：纳秒
+
+        public LongDate(ulong value)
+        {
+            this.Value = value;
+        }
+
+        public static implicit operator LongDate(ulong value)
+        {
+            return new LongDate(value);
+        }
+
+        public static implicit operator ulong(LongDate date)
+        {
+            return date.Value;
+        }
+
+        public static implicit operator System.DateTime(LongDate date)
+        {
+            // 纳秒转换为 ticks: 1 tick = 100 nanoseconds
+            long ticks = (long)(date.Value / TicksPerNanosecond);
+            return DateBase + System.TimeSpan.FromTicks(ticks);
+        }
+
+        public static implicit operator LongDate(System.DateTime date)
+        {
+            if (date.Kind != DateTimeKind.Utc)
+            {
+                date = date.ToUniversalTime();
+            }
+
+            if (date < DateBase)
+            {
+                throw new BusinessException(
+                    code: "DATE_BEFORE_EPOCH",
+                    message: $"DateTime {date:yyyy-MM-dd} is before Unix epoch (1970-01-01)",
+                    details: $"Minimum allowed date is 1970-01-01"
+                );
+            }
+
+            var span = date - DateBase;
+            var ticks = span.Ticks;
+
+            // 将 ticks 转换为纳秒
+            ulong nanoseconds = (ulong)(ticks * TicksPerNanosecond);
+
+            if (nanoseconds > MaxValue || span.Ticks < 0)
+            {
+                throw new BusinessException(
+                    code: "DATE_EXCEEDS_MAXIMUM",
+                    message: $"DateTime {date:yyyy-MM-dd} exceeds maximum allowed date",
+                    details: $"Provided: {date:yyyy-MM-dd}, Maximum: {MaxDateTime:yyyy-MM-dd}"
+                );
+            }
+
+            return new LongDate(nanoseconds);
+        }
+    }
+}
