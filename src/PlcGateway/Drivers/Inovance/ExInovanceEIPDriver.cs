@@ -1,10 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Text;
-using PlcGateway.Abstractions;
+﻿using PlcGateway.Abstractions;
 using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
 using PlcGateway.Drivers.Inovance.Data;
+using System;
+using System.Net;
+using System.Text;
+using static PlcGateway.Drivers.Inovance.InovanceErrorCode;
 
 namespace PlcGateway.Drivers.Inovance
 {
@@ -38,7 +39,8 @@ namespace PlcGateway.Drivers.Inovance
         {
             if (value is null)
             {
-                throw new BusinessException("PLC:ArgumentNull", "Value cannot be null.")
+                throw new BusinessException(
+                    code: INOVANCE_NULL_VALUE, "Value cannot be null.")
                     .WithData("Parameter", nameof(value))
                     .WithData("Address", address);
             }
@@ -113,7 +115,8 @@ namespace PlcGateway.Drivers.Inovance
                 return (addr, val, drv) =>
                 {
                     var typeName = typeof(T).Name;
-                    throw new BusinessException("PLC:UnsupportedType", $"Type '{typeName}' is not supported.")
+                    throw new BusinessException(
+                        INOVANCE_UNSUPPORTED_TYPE, $"Type '{typeName}' is not supported.")
                         .WithData("Type", typeName)
                         .WithData("Address", addr)
                         .WithData("SupportedTypes", "bool, byte, sbyte, short, ushort, int, uint, long, ulong, float, double, string, Bits8Bit, Bits16Bit, Bits32Bit, Bits64Bit");

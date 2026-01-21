@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net;
 using Inovance.EtherNetIP.Native;
-using PlcGateway.Core.Exceptions;
+using PlcGateway.Drivers.Inovance.Exceptions;
 
 namespace PlcGateway.Drivers.Inovance
 {
