@@ -5,6 +5,7 @@ using PlcGateway.Core.Converter;
 using PlcGateway.Core.Exceptions;
 using TwinCAT.Ads;
 using BeckhoffData = PlcGateway.Drivers.Beckhoff.Data;
+using static PlcGateway.Drivers.Beckhoff.BeckhoffErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
 {
@@ -127,7 +128,9 @@ namespace PlcGateway.Drivers.Beckhoff
                 return (addr, val, drv) =>
                 {
                     var typeName = typeof(T).Name;
-                    throw new BusinessException("PLC:UnsupportedType", $"Type '{typeName}' is not supported.")
+                    throw new BusinessException(
+                        ADS_UNSUPPORTED_TYPE,
+                        $"Type '{typeName}' is not supported.")
                         .WithData("Type", typeName)
                         .WithData("Address", addr)
                         .WithData("SupportedTypes",
@@ -142,7 +145,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             if (value is null)
             {
-                throw new BusinessException("PLC:ArgumentNull", "Value cannot be null.")
+                throw new BusinessException(ADS_NULL_VALUE, "Value cannot be null.")
                     .WithData("Parameter", nameof(value))
                     .WithData("Indices", indices);
             }
