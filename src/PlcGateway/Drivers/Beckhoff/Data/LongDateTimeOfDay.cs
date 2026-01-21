@@ -1,5 +1,5 @@
-﻿using System;
-using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
+using System;
 
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
@@ -15,7 +15,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
         {
             if (nanosecondsSinceMidnight > MaxValue)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "TIME_OF_DAY_OUT_OF_RANGE",
                     message: $"Time of day value {nanosecondsSinceMidnight} ns is out of range",
                     details: $"Value must be between 0 and {MaxValue} ns (23:59:59.999999999)"
@@ -46,7 +46,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
         {
             if (timeSpan < TimeSpan.Zero)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "TIME_OF_DAY_NEGATIVE",
                     message: "Time of day cannot be negative",
                     details: $"TimeSpan: {timeSpan}"
@@ -55,7 +55,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
 
             if (timeSpan >= TimeSpan.FromDays(1))
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "TIME_OF_DAY_EXCEEDS_24H",
                     message: "Time of day exceeds 24 hours",
                     details: $"TimeSpan: {timeSpan}, Maximum: 23:59:59.999999999"
@@ -67,7 +67,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
 
             if (nanoseconds > MaxValue)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "TIME_OF_DAY_INVALID",
                     message: "Invalid time of day value",
                     details: $"TimeSpan: {timeSpan}, Total nanoseconds: {nanoseconds}"

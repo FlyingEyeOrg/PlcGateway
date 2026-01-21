@@ -1,5 +1,5 @@
-﻿using System;
-using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
+using System;
 
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
@@ -46,7 +46,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
 
             if (date < DateBase)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "DATE_BEFORE_EPOCH",
                     message: $"DateTime {date:yyyy-MM-dd HH:mm:ss.fffffff} is before Unix epoch (1970-01-01)",
                     details: $"Minimum allowed date is 1970-01-01"
@@ -61,7 +61,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
 
             if (nanoseconds > MaxValue)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "DATE_EXCEEDS_MAXIMUM",
                     message: $"DateTime {date:yyyy-MM-dd HH:mm:ss.fffffff} exceeds maximum allowed date",
                     details: $"Provided: {date:yyyy-MM-dd HH:mm:ss.fffffff}, Maximum: {MaxDateTime:yyyy-MM-dd HH:mm:ss.fffffff}"

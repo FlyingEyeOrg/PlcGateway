@@ -1,5 +1,5 @@
-﻿using System;
-using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
+using System;
 
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
@@ -33,7 +33,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             // 检查是否超出 TimeSpan 范围
             if (lTime.Value / 100 > long.MaxValue)  // 转换为 ticks 检查
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "LTIME_TO_TIMESPAN_OVERFLOW",
                     message: "LTime value too large for TimeSpan"
                 );
@@ -47,7 +47,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
         {
             if (time < TimeSpan.Zero)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "LTIME_NEGATIVE_TIMESPAN",
                     message: "TimeSpan cannot be negative"
                 );
@@ -57,7 +57,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
 
             if (totalNs < 0 || totalNs > MaxValue)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: "LTIME_OUT_OF_RANGE",
                     message: $"TimeSpan value {time} exceeds LTime range"
                 );

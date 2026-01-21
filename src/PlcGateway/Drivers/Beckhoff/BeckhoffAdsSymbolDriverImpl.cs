@@ -1,4 +1,4 @@
-﻿using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
 using PlcGateway.Drivers.Converter;
 using System;
 using System.Collections.Concurrent;
@@ -52,13 +52,13 @@ namespace PlcGateway.Drivers.Beckhoff
         /// </summary>
         /// <param name="instancePath">The instance path of the symbol (e.g., "MAIN.MyVariable")</param>
         /// <returns>The ISymbol instance for the requested symbol</returns>
-        /// <exception cref="BusinessException">Thrown when the symbol is not found or cache is not initialized</exception>
+        /// <exception cref="BeckhoffException">Thrown when the symbol is not found or cache is not initialized</exception>
         private IAdsSymbol GetSymbol(string instancePath)
         {
             // Validate input parameter
             if (string.IsNullOrWhiteSpace(instancePath))
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_SYMBOL_INVALID,
                     message: "Symbol instance path cannot be null or empty",
                     details: "The instancePath parameter must contain a valid PLC symbol path."
@@ -68,7 +68,7 @@ namespace PlcGateway.Drivers.Beckhoff
             // Check if symbol cache is initialized
             if (Symbols == null)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_SYMBOL_CACHE_NOT_INITIALIZED,
                     message: "PLC symbol cache is not initialized",
                     details: "Symbol cache must be initialized before accessing symbols. Call InitializeSymbolCache() first."
@@ -88,7 +88,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (errorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_SYMBOL_NOT_FOUND,
                     message: $"Symbol '{normalizedPath}' not found in PLC",
                     details: $"ADS Error: {errorCode} (0x{(int)errorCode:X8}). The symbol may not exist or PLC is not accessible."
@@ -97,7 +97,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (newSymbol == null)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_SYMBOL_INVALID,
                     message: $"Symbol '{normalizedPath}' returned null from PLC",
                     details: "PLC returned a null symbol object. This may indicate a PLC configuration issue."
@@ -120,7 +120,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (resultSymbols.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_SYMBOL_LOAD_FAILED,
                     message: "Failed to load PLC symbols from target device",
                     details: $"ADS Error Code: {resultSymbols.ErrorCode} ({(int)resultSymbols.ErrorCode}). " +
@@ -131,7 +131,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (resultSymbols.Symbols == null || resultSymbols.Symbols.Count == 0)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_NO_SYMBOLS_FOUND,
                     message: "No PLC symbols found on the target device",
                     details: "The PLC symbol table appears to be empty. " +
@@ -162,7 +162,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (validSymbols == 0)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_NO_VALID_SYMBOLS,
                     message: "No valid symbols with instance paths found",
                     details: $"Total symbols loaded: {resultSymbols.Symbols.Count}, " +
@@ -179,7 +179,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write sbyte value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -194,7 +194,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write byte value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -209,7 +209,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write bool value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -224,7 +224,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write short value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -239,7 +239,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write ushort value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -254,7 +254,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write int value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -269,7 +269,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write uint value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -284,7 +284,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write long value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -299,7 +299,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write ulong value '{value}' to PLC at indices {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -314,7 +314,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write float value '{value}' to PLC at address {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -329,7 +329,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write double value '{value}' to PLC at indices {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}"
@@ -347,7 +347,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write string value '{value}' to PLC at indices {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}. String length: {value.Length} chars, {bytes.Length} bytes"
@@ -402,7 +402,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (size != symbol.Size)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DATA_SIZE_MISMATCH,
                     message: $"Size mismatch when reading {typeof(TValue).Name} from PLC at address {instancePath}",
                     details: $"Expected size: {size} bytes, Symbol size: {symbol.Size} bytes. " +
@@ -414,7 +414,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_READ_ERROR,
                     message: $"Failed to read {typeof(TValue).Name} from PLC at address {instancePath}",
                     details: $"ADS Error Code: {result.ErrorCode} (0x{(uint)result.ErrorCode:X8}) - {GetAdsErrorMessage(result.ErrorCode)}. IndexGroup: 0x{symbol.IndexGroup:X8}, IndexOffset: 0x{symbol.IndexOffset:X8}, Requested size: {size} bytes"
@@ -427,7 +427,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (Exception ex) when (ex is InvalidCastException || ex is ArgumentException || ex is FormatException)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DATA_CONVERSION_ERROR,
                     message: $"Failed to convert byte array to {typeof(TValue).Name} for address {instancePath}",
                     details: $"Byte array length: {result.Data.Length}, expected size: {size}, exception: {ex.Message}"

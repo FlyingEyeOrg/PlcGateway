@@ -1,5 +1,5 @@
 ﻿using PlcGateway.Core;
-using PlcGateway.Core.Exceptions;
+using PlcGateway.Drivers.Beckhoff.Exceptions;
 using System;
 using System.Text.RegularExpressions;
 
@@ -31,12 +31,12 @@ namespace PlcGateway.Drivers.Beckhoff
         /// <param name="indexGroup">索引组（内存区域标识符）</param>
         /// <param name="indexOffset">内存区域内的字节偏移量</param>
         /// <param name="dataLength">字符串数据长度（必须大于0）</param>
-        /// <exception cref="BusinessException">当参数无效时抛出</exception>
+        /// <exception cref="BeckhoffException">当参数无效时抛出</exception>
         public StringAdsIndexAddress(uint indexGroup, uint indexOffset, int dataLength)
         {
             if (dataLength <= 0)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_STRING_LENGTH,
                     message: "Data length must be greater than zero",
                     details: $"Data length must be a positive integer. Provided value: {dataLength}"
@@ -46,7 +46,7 @@ namespace PlcGateway.Drivers.Beckhoff
             const uint MAX_ALLOWED_LENGTH = 65535; // 合理的PLC字符串长度限制
             if (dataLength > MAX_ALLOWED_LENGTH)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_STRING_LENGTH,
                     message: $"Data length exceeds maximum allowed limit of {MAX_ALLOWED_LENGTH}",
                     details: $"Provided data length: {dataLength}. Maximum allowed: {MAX_ALLOWED_LENGTH}"
@@ -95,7 +95,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             if (string.IsNullOrWhiteSpace(indices))
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDICES_FORMAT,
                     message: "Indices string cannot be null or empty",
                     details: "Provide indices in format: [indexGroup, indexOffset, dataLength]. Example: [0x4020, 0, 256]"
@@ -108,7 +108,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (!match.Success)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDICES_FORMAT,
                     message: "Invalid indices format. Expected: [indexGroup, indexOffset, dataLength]",
                     details: $"Provided indices: '{indices}'. Valid examples: [0x4020, 0, 256], [100, 200, 1024], [0x4021, 10, 512]"
@@ -133,7 +133,7 @@ namespace PlcGateway.Drivers.Beckhoff
                 // 验证dataLength必须大于0
                 if (dataLength <= 0)
                 {
-                    throw new BusinessException(
+                    throw new BeckhoffException(
                         code: ADS_INVALID_STRING_LENGTH,
                         message: "Data length must be greater than zero",
                         details: $"Data length must be a positive integer. Provided value: {dataLength}"
@@ -143,7 +143,7 @@ namespace PlcGateway.Drivers.Beckhoff
                 const uint MAX_ALLOWED_LENGTH = 65535;
                 if (dataLength > MAX_ALLOWED_LENGTH)
                 {
-                    throw new BusinessException(
+                    throw new BeckhoffException(
                         code: ADS_INVALID_STRING_LENGTH,
                         message: $"Data length exceeds maximum allowed limit of {MAX_ALLOWED_LENGTH}",
                         details: $"Provided data length: {dataLength}. Maximum allowed: {MAX_ALLOWED_LENGTH}"
@@ -152,13 +152,13 @@ namespace PlcGateway.Drivers.Beckhoff
 
                 return (indexGroup, indexOffset, dataLength);
             }
-            catch (BusinessException)
+            catch (BeckhoffException)
             {
-                throw; // 重新抛出BusinessException
+                throw; // 重新抛出BeckhoffException
             }
             catch (FormatException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDEX_NUMBER_FORMAT,
                     message: "Failed to parse numbers in indices string",
                     details: $"Indices: '{indices}', inner exception: {ex.Message}. Use decimal (e.g., 123) or hex (e.g., 0x7B) format"
@@ -166,7 +166,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (OverflowException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INDEX_NUMBER_OVERFLOW,
                     message: "Number in indices is out of valid range",
                     details: $"Indices: '{indices}', valid range: 0 to {uint.MaxValue}, inner exception: {ex.Message}"

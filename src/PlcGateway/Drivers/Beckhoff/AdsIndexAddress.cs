@@ -1,8 +1,7 @@
-﻿using System;
+﻿using PlcGateway.Core;
+using PlcGateway.Drivers.Beckhoff.Exceptions;
+using System;
 using System.Text.RegularExpressions;
-using PlcGateway.Core;
-using PlcGateway.Core.Exceptions;
-
 using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff
@@ -54,7 +53,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             if (string.IsNullOrWhiteSpace(indices))
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDICES_FORMAT,
                     message: "Indices string cannot be null or empty",
                     details: "Provide indices in format: [indexGroup, indexOffset]. Example: [0x4020, 0] for M memory area"
@@ -67,7 +66,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (!match.Success)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDICES_FORMAT,
                     message: $"Invalid indices format. Expected: [indexGroup, indexOffset]",
                     details: $"Provided indices: '{indices}'. Valid examples: [0x4020, 0] (M area), [0x4021, 10] (I area), [0x4022, 20] (Q area), [0x4040, 100] (DB1 area)"
@@ -89,7 +88,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (FormatException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_INDEX_NUMBER_FORMAT,
                     message: $"Failed to parse numbers in indices string",
                     details: $"Indices: '{indices}', inner exception: {ex.Message}. Use decimal (e.g., 123) or hex (e.g., 0x7B) format"
@@ -97,7 +96,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (OverflowException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INDEX_NUMBER_OVERFLOW,
                     message: $"Number in indices is out of valid range",
                     details: $"Indices: '{indices}', valid range: 0 to {uint.MaxValue}, inner exception: {ex.Message}"

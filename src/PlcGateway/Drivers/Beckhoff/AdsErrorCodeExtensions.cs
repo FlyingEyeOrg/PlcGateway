@@ -1,6 +1,4 @@
-﻿using TwinCAT.Ads;
-
-namespace PlcGateway.Drivers.Beckhoff
+﻿namespace PlcGateway.Drivers.Beckhoff
 {
     public static class AdsErrorCodeExtensions
     {

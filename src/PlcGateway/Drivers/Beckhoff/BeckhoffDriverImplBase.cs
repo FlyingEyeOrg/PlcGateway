@@ -1,4 +1,4 @@
-﻿using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
 using System;
 using System.Text;
 using TwinCAT.Ads;
@@ -20,14 +20,14 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public BeckhoffDriverImplBase(AmsNetId amsNetId, AmsPort port, Encoding defaultEncoding)
         {
-            AmsNetId = amsNetId ?? throw new BusinessException(
+            AmsNetId = amsNetId ?? throw new BeckhoffException(
                 code: ADS_INVALID_AMS_NET_ID,
                 message: "AMS Net ID cannot be null",
                 details: "Provide a valid AMS Net ID for PLC connection"
             );
 
             Port = port;
-            Encoding = defaultEncoding ?? throw new BusinessException(
+            Encoding = defaultEncoding ?? throw new BeckhoffException(
                 code: ADS_INVALID_ENCODING,
                 message: "Encoding cannot be null",
                 details: "Provide a valid encoding for string operations"
@@ -36,7 +36,7 @@ namespace PlcGateway.Drivers.Beckhoff
             // Validate encoding
             if (Encoding == null)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_ENCODING,
                     message: "Default encoding is null",
                     details: "Encoding must be properly initialized"
@@ -63,7 +63,7 @@ namespace PlcGateway.Drivers.Beckhoff
             catch (AdsErrorException ex)
             {
                 var errorMessage = GetAdsErrorMessage(ex.ErrorCode);
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_CONNECTION_ERROR,
                     message: $"Failed to connect to PLC at {AmsNetId}:{Port}",
                     details: $"ADS Error Code: {ex.ErrorCode} (0x{(uint)ex.ErrorCode:X8}) - {errorMessage}",
@@ -72,7 +72,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (ArgumentNullException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_CONNECTION_PARAMETERS,
                     message: "Invalid connection parameters provided",
                     details: $"AMS Net ID: {AmsNetId}, Port: {Port}. Check that AMS Net ID is not null or empty.",
@@ -81,7 +81,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (InvalidOperationException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_CLIENT_STATE,
                     message: "ADS client is in an invalid state for connection",
                     details: "The ADS client may already be connected or disposed.",
@@ -90,7 +90,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (Exception ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_CONNECTION_FAILED,
                     message: $"Failed to establish connection to PLC at {AmsNetId}:{Port}",
                     details: $"Unexpected error occurred. AMS Net ID: {AmsNetId}, Port: {Port}, Exception: {ex.GetType().Name} - {ex.Message}",
@@ -100,7 +100,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (!AdsClient.IsConnected)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_CONNECTION_VERIFICATION_FAILED,
                     message: "Connection verification failed - client reports not connected",
                     details: $"ADS client Connect() method returned without error but IsConnected is false. AMS Net ID: {AmsNetId}, Port: {Port}"
@@ -122,7 +122,7 @@ namespace PlcGateway.Drivers.Beckhoff
             catch (AdsErrorException ex)
             {
                 var errorMessage = GetAdsErrorMessage(ex.ErrorCode);
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DISCONNECT_ERROR,
                     message: $"Failed to disconnect from PLC at {AmsNetId}:{Port}",
                     details: $"ADS Error Code: {ex.ErrorCode} (0x{(uint)ex.ErrorCode:X8}) - {errorMessage}",
@@ -131,7 +131,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (InvalidOperationException ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_INVALID_DISCONNECT_STATE,
                     message: "ADS client is in an invalid state for disconnection",
                     details: "The ADS client may already be disconnected or disposed.",
@@ -140,7 +140,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (Exception ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DISCONNECTION_FAILED,
                     message: $"Failed to disconnect from PLC at {AmsNetId}:{Port}",
                     details: $"Unexpected error occurred during disconnection. Exception: {ex.GetType().Name} - {ex.Message}",
@@ -150,7 +150,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             if (AdsClient.IsConnected)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DISCONNECTION_VERIFICATION_FAILED,
                     message: "Disconnection verification failed - client still reports as connected",
                     details: $"ADS client Disconnect() method returned without error but IsConnected is still true. AMS Net ID: {AmsNetId}, Port: {Port}"
@@ -175,7 +175,7 @@ namespace PlcGateway.Drivers.Beckhoff
             {
                 // Log but don't throw in Dispose
                 // Consider logging this exception
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_DISPOSE_ERROR,
                     message: "Error occurred while disposing ADS client",
                     details: $"Exception during disposal: {ex.GetType().Name} - {ex.Message}",
@@ -188,7 +188,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             if (!IsConnected)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_NOT_CONNECTED,
                     message: "PLC connection is not established",
                     details: $"Call Connect() method first. AMS Net ID: {AmsNetId}, Port: {Port}"
@@ -201,7 +201,7 @@ namespace PlcGateway.Drivers.Beckhoff
                 var state = AdsClient.ReadState();
                 if (state.AdsState == AdsState.Invalid)
                 {
-                    throw new BusinessException(
+                    throw new BeckhoffException(
                         code: ADS_INVALID_STATE,
                         message: "PLC is in an invalid state",
                         details: $"PLC ADS State: {state.AdsState}, Device State: {state.DeviceState}"
@@ -211,7 +211,7 @@ namespace PlcGateway.Drivers.Beckhoff
             catch (AdsErrorException ex)
             {
                 var errorMessage = GetAdsErrorMessage(ex.ErrorCode);
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_CONNECTION_VERIFICATION_ERROR,
                     message: "Failed to verify PLC connection",
                     details: $"ADS Error Code: {ex.ErrorCode} (0x{(uint)ex.ErrorCode:X8}) - {errorMessage}",
@@ -220,7 +220,7 @@ namespace PlcGateway.Drivers.Beckhoff
             }
             catch (Exception ex)
             {
-                throw new BusinessException(
+                throw new BeckhoffException(
                     code: ADS_CONNECTION_VERIFICATION_FAILED,
                     message: "PLC connection verification failed",
                     details: $"Exception while verifying connection: {ex.GetType().Name} - {ex.Message}",
