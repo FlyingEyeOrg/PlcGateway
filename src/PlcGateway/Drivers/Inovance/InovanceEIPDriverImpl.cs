@@ -404,7 +404,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (size < 0)
             {
-                throw new InovanceException("PLC:ReadFailed", $"Failed to read tag '{tagName}'.",
+                throw new InovanceException(INOVANCE_READ_ERROR, $"Failed to read tag '{tagName}'.",
                     $"Error code: {size} (0x{size:X8})")
                     .WithData("TagName", tagName)
                     .WithData("ErrorCode", size);
