@@ -82,41 +82,41 @@
 			保持简洁明了，但信息完整。
 		-->
 		<Description>
-PlcGateway 是一个功能强大、易于使用的工业自动化PLC通信网关库。
+			PlcGateway 是一个功能强大、易于使用的工业自动化PLC通信网关库。
 
-核心特性：
-• 多品牌支持：汇川(Inovance)、西门子(Siemens)、罗克韦尔(Allen-Bradley)、三菱(Mitsubishi)等
-• 多协议支持：Modbus TCP/RTU、S7、EtherNet/IP、MC协议等
-• 统一API：为不同品牌PLC提供一致的编程接口
-• 高性能：异步通信、连接池、数据批量读写优化
-• 可扩展：易于添加新的PLC品牌支持
-• 企业级：支持依赖注入、配置化、监控、日志
+			核心特性：
+			• 多品牌支持：汇川(Inovance)、西门子(Siemens)、罗克韦尔(Allen-Bradley)、三菱(Mitsubishi)等
+			• 多协议支持：Modbus TCP/RTU、S7、EtherNet/IP、MC协议等
+			• 统一API：为不同品牌PLC提供一致的编程接口
+			• 高性能：异步通信、连接池、数据批量读写优化
+			• 可扩展：易于添加新的PLC品牌支持
+			• 企业级：支持依赖注入、配置化、监控、日志
 
-主要功能：
-• 实时数据读写：支持Bool、Byte、Int16、Int32、Float、Double、String等数据类型
-• 批量操作：支持批量读写，减少通信开销
-• 连接管理：自动重连、连接池、心跳检测
-• 错误处理：完善的异常处理机制
-• 扩展性：支持自定义数据转换器、协议扩展
+			主要功能：
+			• 实时数据读写：支持Bool、Byte、Int16、Int32、Float、Double、String等数据类型
+			• 批量操作：支持批量读写，减少通信开销
+			• 连接管理：自动重连、连接池、心跳检测
+			• 错误处理：完善的异常处理机制
+			• 扩展性：支持自定义数据转换器、协议扩展
 
-目标框架：
-• .NET 6.0+、.NET 7.0+、.NET 8.0+
-• .NET Standard 2.0+（兼容.NET Framework 4.6.1+）
+			目标框架：
+			• .NET 6.0+、.NET 7.0+、.NET 8.0+
+			• .NET Standard 2.0+（兼容.NET Framework 4.6.1+）
 
-典型应用场景：
-• MES（制造执行系统）
-• SCADA（数据采集与监控系统）
-• 工业物联网平台
-• 设备数据采集
-• 生产线监控
+			典型应用场景：
+			• MES（制造执行系统）
+			• SCADA（数据采集与监控系统）
+			• 工业物联网平台
+			• 设备数据采集
+			• 生产线监控
 
-快速开始：
-1. 安装：dotnet add package PlcGateway
-2. 配置：services.AddPlcGateway().AddSiemensDriver();
-3. 使用：await client.ReadFloatAsync("DB1.DBD0");
+			快速开始：
+			1. 安装：dotnet add package PlcGateway
+			2. 配置：services.AddPlcGateway().AddSiemensDriver();
+			3. 使用：await client.ReadFloatAsync("DB1.DBD0");
 
-许可证：MIT
-支持：GitHub Issues 或 邮箱支持
+			许可证：MIT
+			支持：GitHub Issues 或 邮箱支持
 		</Description>
 
 		<!--
@@ -154,7 +154,7 @@ PlcGateway 是一个功能强大、易于使用的工业自动化PLC通信网关
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="readme.md" Pack="true" PackagePath="\"></None>
+		<None Include="$(MSBuildProjectDirectory)\..\..\readme.md" Pack="true" PackagePath="\"></None>
 		<None Include="images\icon.png" Pack="true" PackagePath="\"></None>
 		<!-- x64 DLLs 放到 win-x64 运行时目录 -->
 		<Content Include="libs\Inovance\x64\*.dll">
