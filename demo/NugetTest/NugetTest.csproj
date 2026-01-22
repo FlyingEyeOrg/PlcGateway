@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PlcGateway" Version="1.0.0-rc" />
+    <PackageReference Include="PlcGateway" Version="1.0.1" />
   </ItemGroup>
 
 </Project>

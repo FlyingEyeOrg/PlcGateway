@@ -12,6 +12,8 @@ namespace NugetTest
 
             kk.Connect();
 
+            kk.Read<int>("asdf");
+
             Console.WriteLine("Hello, World!");
 
             Console.ReadKey();
