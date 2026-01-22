@@ -53,7 +53,7 @@ PlcGateway.                          ← 根命名空间
 
 ## ⭐ 如果这个项目对你有帮助，请给我们一个 Star！
 
-https://api.star-history.com/svg?repos=yourname/plcgateway&type=Date](https://star-history.com/#yourname/plcgateway&Date)
+<https://github.com/FlyingEyeOrg/PlcGateway#/>
 
 ---
 
