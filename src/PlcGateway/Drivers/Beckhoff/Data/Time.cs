@@ -1,5 +1,6 @@
-﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
-using System;
+﻿using System;
+using PlcGateway.Drivers.Beckhoff.Exceptions;
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
 
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
@@ -33,7 +34,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (value < TimeSpan.Zero)
             {
                 throw new BeckhoffException(
-                    code: "TIME_NEGATIVE",
+                    code: ADS_INVALID_ARGUMENT,
                     message: "Time cannot be negative",
                     details: $"Provided TimeSpan: {value}. Minimum allowed value is TimeSpan.Zero."
                 );
@@ -46,7 +47,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             {
                 TimeSpan maxTimeSpan = TimeSpan.FromMilliseconds(MaxValue);
                 throw new BeckhoffException(
-                    code: "TIME_EXCEEDS_MAXIMUM",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"Time exceeds maximum allowed value",
                     details: $"Provided: {value} ({totalMs:F0} ms), " +
                             $"Maximum: {maxTimeSpan} ({MaxValue} ms)"

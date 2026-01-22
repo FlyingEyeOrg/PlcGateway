@@ -1,5 +1,7 @@
 ﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
 
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
+
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
     /// <summary>
@@ -41,7 +43,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (date < DateBase)
             {
                 throw new BeckhoffException(
-                    code: "DATE_BEFORE_EPOCH",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"DateTime {date:yyyy-MM-dd} is before Unix epoch (1970-01-01)",
                     details: $"Minimum allowed date is 1970-01-01"
                 );
@@ -52,7 +54,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (span.TotalSeconds > MaxValue)
             {
                 throw new BeckhoffException(
-                    code: "DATE_EXCEEDS_MAXIMUM",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"DateTime {date:yyyy-MM-dd} exceeds maximum allowed date",
                     details: $"Provided: {date:yyyy-MM-dd}, Maximum: {MaxDateTime:yyyy-MM-dd}"
                 );
@@ -61,7 +63,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (span.TotalSeconds < 0)
             {
                 throw new BeckhoffException(
-                    code: "DATE_INVALID_TIMESPAN",
+                    code: ADS_INVALID_ARGUMENT,
                     message: "TimeSpan calculation resulted in negative value",
                     details: $"DateTime: {date:yyyy-MM-dd}, Base: 1970-01-01"
                 );

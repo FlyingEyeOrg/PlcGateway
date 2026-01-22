@@ -1,6 +1,8 @@
 ﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
 using System;
 
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
+
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
     public readonly struct LongDateTimeOfDay
@@ -16,7 +18,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (nanosecondsSinceMidnight > MaxValue)
             {
                 throw new BeckhoffException(
-                    code: "TIME_OF_DAY_OUT_OF_RANGE",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"Time of day value {nanosecondsSinceMidnight} ns is out of range",
                     details: $"Value must be between 0 and {MaxValue} ns (23:59:59.999999999)"
                 );
@@ -47,7 +49,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (timeSpan < TimeSpan.Zero)
             {
                 throw new BeckhoffException(
-                    code: "TIME_OF_DAY_NEGATIVE",
+                    code: ADS_INVALID_ARGUMENT,
                     message: "Time of day cannot be negative",
                     details: $"TimeSpan: {timeSpan}"
                 );
@@ -56,7 +58,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (timeSpan >= TimeSpan.FromDays(1))
             {
                 throw new BeckhoffException(
-                    code: "TIME_OF_DAY_EXCEEDS_24H",
+                    code: ADS_INVALID_ARGUMENT,
                     message: "Time of day exceeds 24 hours",
                     details: $"TimeSpan: {timeSpan}, Maximum: 23:59:59.999999999"
                 );
@@ -68,7 +70,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (nanoseconds > MaxValue)
             {
                 throw new BeckhoffException(
-                    code: "TIME_OF_DAY_INVALID",
+                    code: ADS_INVALID_ARGUMENT,
                     message: "Invalid time of day value",
                     details: $"TimeSpan: {timeSpan}, Total nanoseconds: {nanoseconds}"
                 );

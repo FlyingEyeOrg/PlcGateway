@@ -1,6 +1,8 @@
 ﻿using PlcGateway.Drivers.Beckhoff.Exceptions;
 using System;
 
+using static PlcGateway.Drivers.Beckhoff.AdsErrorCode;
+
 namespace PlcGateway.Drivers.Beckhoff.Data
 {
     public readonly struct LongDateTime
@@ -47,7 +49,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (date < DateBase)
             {
                 throw new BeckhoffException(
-                    code: "DATE_BEFORE_EPOCH",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"DateTime {date:yyyy-MM-dd HH:mm:ss.fffffff} is before Unix epoch (1970-01-01)",
                     details: $"Minimum allowed date is 1970-01-01"
                 );
@@ -62,7 +64,7 @@ namespace PlcGateway.Drivers.Beckhoff.Data
             if (nanoseconds > MaxValue)
             {
                 throw new BeckhoffException(
-                    code: "DATE_EXCEEDS_MAXIMUM",
+                    code: ADS_INVALID_ARGUMENT,
                     message: $"DateTime {date:yyyy-MM-dd HH:mm:ss.fffffff} exceeds maximum allowed date",
                     details: $"Provided: {date:yyyy-MM-dd HH:mm:ss.fffffff}, Maximum: {MaxDateTime:yyyy-MM-dd HH:mm:ss.fffffff}"
                 );

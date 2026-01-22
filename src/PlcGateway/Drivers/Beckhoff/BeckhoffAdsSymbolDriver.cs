@@ -137,7 +137,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             if (value is null)
             {
-                throw new BeckhoffException(ADS_NULL_VALUE, "Value cannot be null.")
+                throw new BeckhoffException(ADS_INVALID_ARGUMENT, "Value cannot be null.")
                     .WithData("Parameter", nameof(value))
                     .WithData("Indices", instancePath);
             }

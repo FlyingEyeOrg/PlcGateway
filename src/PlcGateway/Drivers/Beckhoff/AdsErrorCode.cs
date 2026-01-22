@@ -13,8 +13,6 @@
 
         public const string ADS_UNSUPPORTED_TYPE = "ADS_UNSUPPORTED_TYPE";
 
-        public const string ADS_NULL_VALUE = "ADS_NULL_VALUE";
-
         public const string ADS_WRITE_ERROR = "ADS_WRITE_ERROR";
 
         public const string ADS_READ_ERROR = "ADS_READ_ERROR";
@@ -68,5 +66,7 @@
         public const string ADS_CONNECTION_VERIFICATION_ERROR = "ADS_CONNECTION_VERIFICATION_ERROR";
 
         public const string ADS_INVALID_STRING_LENGTH = "ADS_INVALID_STRING_LENGTH";
+
+        public const string ADS_INVALID_ARGUMENT = "ADS_INVALID_ARGUMENT";
     }
 }
