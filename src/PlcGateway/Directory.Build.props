@@ -18,6 +18,11 @@
 		<PackageVersion>1.0.3</PackageVersion>
 
 		<!--
+			包说明的精简摘要。会显示在 NuGet 包列表和搜索结果中。
+		-->
+		<PackageSummary>面向工业自动化场景的 PLC 通信网关库，提供汇川(Inovance)与倍福(Beckhoff)驱动支持。</PackageSummary>
+
+		<!--
 			包的用户友好显示名称。会在NuGet包管理器界面中显示。
 			应该清晰描述包的用途，支持中文。
 		-->
@@ -28,6 +33,21 @@
 			会在NuGet包详情页显示。
 		-->
 		<Authors>LannoxLan</Authors>
+
+		<!--
+			包的项目主页。建议指向仓库主页或项目官网。
+		-->
+		<PackageProjectUrl>https://github.com/FlyingEyeOrg/PlcGateway</PackageProjectUrl>
+
+		<!--
+			包的许可表达式。与仓库中声明的 MIT 许可证保持一致。
+		-->
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+		<!--
+			包在 NuGet.org 上展示的关键字，帮助搜索与分类。
+		-->
+		<PackageTags>plc;industrial-automation;beckhoff;inovance;ads;netstandard;windows</PackageTags>
 
 		<!--
 			包图标文件名。图标文件需要放在项目根目录。
@@ -70,6 +90,11 @@
 		<RepositoryType>git</RepositoryType>
 
 		<!--
+			默认仓库分支，用于源代码链接和包元数据展示。
+		-->
+		<RepositoryBranch>master</RepositoryBranch>
+
+		<!--
 			包的详细描述。这是NuGet包最重要的元数据之一。
 			好的描述应该包含：
 			1. 包的主要功能
@@ -82,41 +107,32 @@
 			保持简洁明了，但信息完整。
 		-->
 		<Description>
-			PlcGateway 是一个功能强大、易于使用的工业自动化PLC通信网关库。
+			PlcGateway 是一个面向工业自动化场景的 PLC 通信网关库，当前提供汇川(Inovance)与倍福(Beckhoff)驱动支持。
 
 			核心特性：
-			• 多品牌支持：汇川(Inovance)、西门子(Siemens)、罗克韦尔(Allen-Bradley)、三菱(Mitsubishi)等
-			• 多协议支持：Modbus TCP/RTU、S7、EtherNet/IP、MC协议等
-			• 统一API：为不同品牌PLC提供一致的编程接口
-			• 高性能：异步通信、连接池、数据批量读写优化
-			• 可扩展：易于添加新的PLC品牌支持
-			• 企业级：支持依赖注入、配置化、监控、日志
+			• 统一 API：为不同 PLC 驱动提供一致的读写接口
+			• 强类型转换：支持基础类型与驱动专用数据类型
+			• Windows 友好：同时兼容 x86 与 x64 运行环境
+			• 原生库打包：汇川驱动随包提供对应运行时的 native DLL
+			• 易于集成：适合桌面应用、工控上位机与自动化服务
 
 			主要功能：
-			• 实时数据读写：支持Bool、Byte、Int16、Int32、Float、Double、String等数据类型
-			• 批量操作：支持批量读写，减少通信开销
-			• 连接管理：自动重连、连接池、心跳检测
-			• 错误处理：完善的异常处理机制
-			• 扩展性：支持自定义数据转换器、协议扩展
+			• 实时数据读写：支持 Bool、Byte、Int16、Int32、Float、Double、String 等类型
+			• 字符串地址封装：支持索引地址与字符串地址的统一转换
+			• 错误处理：内置驱动专用异常与错误码
+			• 可发布到 NuGet：支持 GitHub Actions 自动打包发布
 
 			目标框架：
-			• .NET 6.0+、.NET 7.0+、.NET 8.0+
-			• .NET Standard 2.0+（兼容.NET Framework 4.6.1+）
-
-			典型应用场景：
-			• MES（制造执行系统）
-			• SCADA（数据采集与监控系统）
-			• 工业物联网平台
-			• 设备数据采集
-			• 生产线监控
+			• .NET Standard 2.0
+			• .NET Standard 2.1
 
 			快速开始：
 			1. 安装：dotnet add package PlcGateway
-			2. 配置：services.AddPlcGateway().AddSiemensDriver();
-			3. 使用：await client.ReadFloatAsync("DB1.DBD0");
+			2. 引用：using PlcGateway.Drivers.Beckhoff; 或 using PlcGateway.Drivers.Inovance;
+			3. 使用：创建对应驱动并执行 Read / Write
 
 			许可证：MIT
-			支持：GitHub Issues 或 邮箱支持
+			支持：GitHub Issues
 		</Description>
 
 		<!--
@@ -125,7 +141,7 @@
 			如果使用开源许可证，这里声明版权所有者。
 		-->
 		<Copyright>
-			© 2024 LannoxLan. 保留所有权利。
+			© 2024-2026 LannoxLan. 保留所有权利。
 
 			注意：本软件基于MIT许可证分发。
 			用户可以自由使用、复制、修改、合并、出版发行、散布、再授权及贩售，
