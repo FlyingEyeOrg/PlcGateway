@@ -28,11 +28,15 @@ jobs:
         id: vars
         shell: pwsh
         run: |
+          [xml]$props = Get-Content .\src\PlcGateway\Directory.Build.props
+          $baseVersion = $props.Project.PropertyGroup.PackageVersion
+
           if ($env:GITHUB_REF -like 'refs/tags/*') {
             $version = $env:GITHUB_REF.Substring(10)
           }
           else {
-            $version = $env:GITHUB_SHA.Substring(0, 8)
+            $shortSha = $env:GITHUB_SHA.Substring(0, 8)
+            $version = "$baseVersion-ci.$shortSha"
           }
 
           if ($version.StartsWith('v')) {
