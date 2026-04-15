@@ -13,7 +13,7 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment: production
     steps:
       - name: Checkout
@@ -26,16 +26,20 @@ jobs:
 
       - name: Determine package version
         id: vars
-        shell: bash
+        shell: pwsh
         run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/}"
-          else
-            VERSION="${GITHUB_SHA::8}"
-          fi
-          # strip leading v if present
-          VERSION="${VERSION#v}"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if ($env:GITHUB_REF -like 'refs/tags/*') {
+            $version = $env:GITHUB_REF.Substring(10)
+          }
+          else {
+            $version = $env:GITHUB_SHA.Substring(0, 8)
+          }
+
+          if ($version.StartsWith('v')) {
+            $version = $version.Substring(1)
+          }
+
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Restore
         run: dotnet restore PlcGateway.sln
@@ -44,9 +48,10 @@ jobs:
         run: dotnet build PlcGateway.sln -c Release --no-restore
 
       - name: Pack PlcGateway
+        shell: pwsh
         run: |
-          mkdir -p ./artifacts
-          dotnet pack src/PlcGateway/PlcGateway.csproj -c Release -o ./artifacts \
+          New-Item -ItemType Directory -Force -Path .\artifacts | Out-Null
+          dotnet pack src/PlcGateway/PlcGateway.csproj -c Release -o .\artifacts `
             --no-build /p:PackageVersion=${{ steps.vars.outputs.version }} /p:IncludeSymbols=true /p:IncludeSource=true
 
       - name: NuGet login (OIDC -> temp API key)
@@ -56,5 +61,6 @@ jobs:
           user: ${{ secrets.NUGET_USER }}
 
       - name: Push to NuGet.org using Trusted Publishing
+        shell: pwsh
         run: |
-          dotnet nuget push "./artifacts/PlcGateway.${{ steps.vars.outputs.version }}.nupkg" -s https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
+          dotnet nuget push ".\artifacts\PlcGateway.${{ steps.vars.outputs.version }}.nupkg" -s https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
