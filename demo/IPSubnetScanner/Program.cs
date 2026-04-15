@@ -72,7 +72,7 @@ namespace NetworkInterfaceInfo
             Console.WriteLine($"ID: {ni.Id}");
 
             // 物理地址
-            Console.WriteLine($"物理地址(MAC): {FormatMacAddress(ni.GetPhysicalAddress()?.ToString())}");
+            Console.WriteLine($"物理地址(MAC): {FormatMacAddress(ni.GetPhysicalAddress()?.ToString() ?? string.Empty)}");
 
             // 速度信息
             if (ni.Speed > 0)
@@ -128,7 +128,8 @@ namespace NetworkInterfaceInfo
                     Console.WriteLine($"    网络地址: {CalculateNetworkAddress(addr.Address, addr.IPv4Mask)}");
                     Console.WriteLine($"    前缀长度: {addr.PrefixLength}");
 
-                    if (addr.DuplicateAddressDetectionState != DuplicateAddressDetectionState.Invalid)
+                    if (OperatingSystem.IsWindows() &&
+                        addr.DuplicateAddressDetectionState != DuplicateAddressDetectionState.Invalid)
                     {
                         Console.WriteLine($"    重复地址检测: {addr.DuplicateAddressDetectionState}");
                     }
@@ -192,7 +193,7 @@ namespace NetworkInterfaceInfo
         #region 显示DHCP信息
         private static void DisplayDHCPInfo(IPInterfaceProperties ipProps)
         {
-            if (ipProps.DhcpServerAddresses.Count > 0)
+            if (!OperatingSystem.IsMacOS() && ipProps.DhcpServerAddresses.Count > 0)
             {
                 Console.WriteLine("\n⚡ DHCP服务器:");
                 Console.WriteLine("  " + new string('-', 50));

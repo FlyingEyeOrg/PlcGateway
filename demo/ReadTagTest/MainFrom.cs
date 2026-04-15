@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Text;
-using Inovance.EtherNetIP.Native;
 using PlcGateway.Abstractions;
 using PlcGateway.Drivers.Inovance;
 using PlcGateway.Drivers.Inovance.Data;
@@ -103,7 +102,7 @@ namespace ReadTagTest
                 DataType.Bits16Bit => BytesToHexString(_driver.Read<Bits16Bit>(address).GetBytes()),
                 DataType.Bits32Bit => BytesToHexString(_driver.Read<Bits32Bit>(address).GetBytes()),
                 DataType.Bits64Bit => BytesToHexString(_driver.Read<Bits64Bit>(address).GetBytes()),
-                DataType.Structure => BytesToHexString(_driver.Read<Structure>(address).GetBytes()),
+                DataType.Structure => throw new NotSupportedException("当前示例程序未开放 Structure 的直接展示，请使用字节数组或专用调试工具。"),
                 _ => throw new Exception("不支持类型")
             };
         }
@@ -182,7 +181,7 @@ namespace ReadTagTest
 
         private void CleanTagButton_Click(object sender, EventArgs e)
         {
-            UnsafeNativeMethods.ResetTagInfo();
+            this.Log("当前示例程序未开放内部标签缓存重置接口。");
         }
 
         private void CleanLogsButton_Click(object sender, EventArgs e)

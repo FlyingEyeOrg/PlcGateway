@@ -472,8 +472,6 @@ namespace PlcGateway.Drivers.Inovance
 
                     if (result != Native.NativeErrorCode.SUCCESS)
                     {
-                        // 连接失败，清理并抛异常
-                        EipProtocolStack.EipStop(hostIP);
                         throw new InovanceException(INOVANCE_CONNECTION_ERROR,
                             $"Failed to connect to PLC at {deviceIP}.",
                             $"Error: {result} (0x{(int)result:X8}).")
@@ -486,8 +484,6 @@ namespace PlcGateway.Drivers.Inovance
 
                     if (status != ConnectionState.CONNECTION_ESTABLISHED)
                     {
-                        // 连接失败，清理并抛异常
-                        EipProtocolStack.EipStop(hostIP);
                         throw new InovanceException(INOVANCE_VERIFY_CONNECTION_FAILED,
                             $"Failed to connect to PLC at {deviceIP}.",
                             $"ConnectionState: {status} (0x{(int)status:X8}).")
@@ -562,10 +558,14 @@ namespace PlcGateway.Drivers.Inovance
             if (_disposed)
                 return;
 
-            _disposed = true;
-
-            if (IsConnected)
+            try
+            {
                 Disconnect();
+            }
+            finally
+            {
+                _disposed = true;
+            }
         }
     }
 }

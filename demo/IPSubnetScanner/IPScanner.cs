@@ -8,9 +8,9 @@ namespace IPSubnetScanner
 {
     public class NetworkInfo
     {
-        public string Address { get; set; }
+        public string Address { get; set; } = string.Empty;
 
-        public string IPv4Mask { get; set; }
+        public string IPv4Mask { get; set; } = string.Empty;
 
         public int PrefixLength { get; set; }
     }

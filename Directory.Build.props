@@ -1,0 +1,14 @@
+<Project>
+	<PropertyGroup>
+		<NormalizedPlatform Condition="'$(Platform)' == ''">AnyCPU</NormalizedPlatform>
+		<NormalizedPlatform Condition="'$(Platform)' != ''">$([System.String]::Copy('$(Platform)').Replace(' ', ''))</NormalizedPlatform>
+
+		<OutputPath Condition="'$(OutputPath)' == ''">bin\$(NormalizedPlatform)\$(Configuration)\</OutputPath>
+		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\$(NormalizedPlatform)\$(Configuration)\$(TargetFramework)\publish\</PublishDir>
+		<PackageOutputPath Condition="'$(PackageOutputPath)' == ''">$(MSBuildProjectDirectory)\bin\$(NormalizedPlatform)\$(Configuration)\packages\</PackageOutputPath>
+
+		<PlatformTarget Condition="'$(NormalizedPlatform)' == 'x86'">x86</PlatformTarget>
+		<PlatformTarget Condition="'$(NormalizedPlatform)' == 'x64'">x64</PlatformTarget>
+		<PlatformTarget Condition="'$(NormalizedPlatform)' == 'AnyCPU'">AnyCPU</PlatformTarget>
+	</PropertyGroup>
+</Project>
