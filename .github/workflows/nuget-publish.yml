@@ -44,8 +44,7 @@ jobs:
             $version = $env:GITHUB_REF.Substring(10)
           }
           else {
-            $shortSha = $env:GITHUB_SHA.Substring(0, 8)
-            $version = "$baseVersion-ci.$shortSha"
+            $version = $baseVersion
           }
 
           if ($version.StartsWith('v')) {
