@@ -1,0 +1,54 @@
+name: Publish NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Determine package version
+        id: vars
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/}"
+          else
+            VERSION="${GITHUB_SHA::8}"
+          fi
+          # strip leading v if present
+          VERSION="${VERSION#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Restore
+        run: dotnet restore PlcGateway.sln
+
+      - name: Build
+        run: dotnet build PlcGateway.sln -c Release --no-restore
+
+      - name: Pack PlcGateway
+        run: |
+          mkdir -p ./artifacts
+          dotnet pack src/PlcGateway/PlcGateway.csproj -c Release -o ./artifacts \
+            --no-build /p:PackageVersion=${{ steps.vars.outputs.version }} /p:IncludeSymbols=true /p:IncludeSource=true
+
+      - name: Push to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ -z "$NUGET_API_KEY" ]; then
+            echo "ERROR: NUGET_API_KEY secret is not set" >&2
+            exit 1
+          fi
+          dotnet nuget push "./artifacts/*.nupkg" -s https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
