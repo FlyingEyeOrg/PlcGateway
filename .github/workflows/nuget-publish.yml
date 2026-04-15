@@ -55,4 +55,4 @@ jobs:
           # When NuGet Trusted Publishing (GitHub Actions integration) is configured for this repository
           # nuget.org accepts the OIDC-provided identity and no API key is required.
           # Use dotnet to push; NuGet's backend will validate the workflow identity.
-          dotnet nuget push "./artifacts/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate
+          dotnet nuget push "./artifacts/PlcGateway.${{ steps.vars.outputs.version }}.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate
