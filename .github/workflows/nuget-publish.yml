@@ -1,5 +1,11 @@
 name: Publish NuGet
 
+# Request permissions required for Trusted Publishing via GitHub Actions OIDC
+permissions:
+  id-token: write
+  contents: read
+  packages: write
+
 on:
   push:
     tags:
@@ -9,6 +15,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,12 +50,9 @@ jobs:
           dotnet pack src/PlcGateway/PlcGateway.csproj -c Release -o ./artifacts \
             --no-build /p:PackageVersion=${{ steps.vars.outputs.version }} /p:IncludeSymbols=true /p:IncludeSource=true
 
-      - name: Push to NuGet.org
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: Push to NuGet.org using Trusted Publishing
         run: |
-          if [ -z "$NUGET_API_KEY" ]; then
-            echo "ERROR: NUGET_API_KEY secret is not set" >&2
-            exit 1
-          fi
-          dotnet nuget push "./artifacts/*.nupkg" -s https://api.nuget.org/v3/index.json -k "$NUGET_API_KEY" --skip-duplicate
+          # When NuGet Trusted Publishing (GitHub Actions integration) is configured for this repository
+          # nuget.org accepts the OIDC-provided identity and no API key is required.
+          # Use dotnet to push; NuGet's backend will validate the workflow identity.
+          dotnet nuget push "./artifacts/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate
