@@ -9,7 +9,12 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: 'Package version to publish when running manually (example: 1.0.3)'
+        required: false
+        type: string
 
 jobs:
   publish:
@@ -30,8 +35,12 @@ jobs:
         run: |
           [xml]$props = Get-Content .\src\PlcGateway\Directory.Build.props
           $baseVersion = $props.Project.PropertyGroup.PackageVersion
+          $manualVersion = "${{ inputs.package_version }}"
 
-          if ($env:GITHUB_REF -like 'refs/tags/*') {
+          if (-not [string]::IsNullOrWhiteSpace($manualVersion)) {
+            $version = $manualVersion
+          }
+          elseif ($env:GITHUB_REF -like 'refs/tags/*') {
             $version = $env:GITHUB_REF.Substring(10)
           }
           else {
