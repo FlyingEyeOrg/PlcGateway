@@ -58,57 +58,57 @@ namespace PlcGateway.Drivers.Inovance
             private static Action<string, T, InovanceEIPDriverImpl> CreateWriter()
             {
                 // 基元类型
-                if (TypeEquality<T, bool>.AreSameType)
+                if (typeof(T) == typeof(bool))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, bool>(val));
 
-                if (TypeEquality<T, byte>.AreSameType)
+                if (typeof(T) == typeof(byte))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, byte>(val));
 
-                if (TypeEquality<T, sbyte>.AreSameType)
+                if (typeof(T) == typeof(sbyte))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, sbyte>(val));
 
-                if (TypeEquality<T, short>.AreSameType)
+                if (typeof(T) == typeof(short))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, short>(val));
 
-                if (TypeEquality<T, ushort>.AreSameType)
+                if (typeof(T) == typeof(ushort))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, ushort>(val));
 
-                if (TypeEquality<T, int>.AreSameType)
+                if (typeof(T) == typeof(int))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, int>(val));
 
-                if (TypeEquality<T, uint>.AreSameType)
+                if (typeof(T) == typeof(uint))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, uint>(val));
 
-                if (TypeEquality<T, long>.AreSameType)
+                if (typeof(T) == typeof(long))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, long>(val));
 
-                if (TypeEquality<T, ulong>.AreSameType)
+                if (typeof(T) == typeof(ulong))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, ulong>(val));
 
-                if (TypeEquality<T, float>.AreSameType)
+                if (typeof(T) == typeof(float))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, float>(val));
 
-                if (TypeEquality<T, double>.AreSameType)
+                if (typeof(T) == typeof(double))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, double>(val));
 
-                if (TypeEquality<T, string>.AreSameType)
+                if (typeof(T) == typeof(string))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, string>(val));
 
                 // Bits 类型
-                if (TypeEquality<T, Bits8Bit>.AreSameType)
+                if (typeof(T) == typeof(Bits8Bit))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, Bits8Bit>(val));
 
-                if (TypeEquality<T, Bits16Bit>.AreSameType)
+                if (typeof(T) == typeof(Bits16Bit))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, Bits16Bit>(val));
 
-                if (TypeEquality<T, Bits32Bit>.AreSameType)
+                if (typeof(T) == typeof(Bits32Bit))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, Bits32Bit>(val));
 
-                if (TypeEquality<T, Bits64Bit>.AreSameType)
+                if (typeof(T) == typeof(Bits64Bit))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, Bits64Bit>(val));
 
                 // Structure 类型
-                if (TypeEquality<T, Structure>.AreSameType)
+                if (typeof(T) == typeof(Structure))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, Structure>(val));
 
                 // 不支持的类型

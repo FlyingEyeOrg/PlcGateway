@@ -21,27 +21,27 @@ namespace PlcGateway.Drivers.Converter
         private static int CalculateSize()
         {
             // 内置类型检查
-            if (TypeEquality<int, T>.AreSameType) return 4;
-            if (TypeEquality<bool, T>.AreSameType) return 1;
-            if (TypeEquality<double, T>.AreSameType) return 8;
-            if (TypeEquality<float, T>.AreSameType) return 4;
-            if (TypeEquality<long, T>.AreSameType) return 8;
-            if (TypeEquality<ulong, T>.AreSameType) return 8;
-            if (TypeEquality<uint, T>.AreSameType) return 4;
-            if (TypeEquality<short, T>.AreSameType) return 2;
-            if (TypeEquality<ushort, T>.AreSameType) return 2;
-            if (TypeEquality<sbyte, T>.AreSameType) return 1;
-            if (TypeEquality<byte, T>.AreSameType) return 1;
+            if (typeof(T) == typeof(int)) return 4;
+            if (typeof(T) == typeof(bool)) return 1;
+            if (typeof(T) == typeof(double)) return 8;
+            if (typeof(T) == typeof(float)) return 4;
+            if (typeof(T) == typeof(long)) return 8;
+            if (typeof(T) == typeof(ulong)) return 8;
+            if (typeof(T) == typeof(uint)) return 4;
+            if (typeof(T) == typeof(short)) return 2;
+            if (typeof(T) == typeof(ushort)) return 2;
+            if (typeof(T) == typeof(sbyte)) return 1;
+            if (typeof(T) == typeof(byte)) return 1;
 
             // Beckhoff 数据类型检查
-            if (TypeEquality<BeckhoffData.Date, T>.AreSameType) return BeckhoffData.Date.Size;
-            if (TypeEquality<BeckhoffData.DateTime, T>.AreSameType) return BeckhoffData.DateTime.Size;
-            if (TypeEquality<BeckhoffData.DateTimeOfDay, T>.AreSameType) return BeckhoffData.DateTimeOfDay.Size;
-            if (TypeEquality<BeckhoffData.LongDate, T>.AreSameType) return BeckhoffData.LongDate.Size;
-            if (TypeEquality<BeckhoffData.LongDateTime, T>.AreSameType) return BeckhoffData.LongDateTime.Size;
-            if (TypeEquality<BeckhoffData.LongDateTimeOfDay, T>.AreSameType) return BeckhoffData.LongDateTimeOfDay.Size;
-            if (TypeEquality<BeckhoffData.LongTime, T>.AreSameType) return BeckhoffData.LongTime.Size;
-            if (TypeEquality<BeckhoffData.Time, T>.AreSameType) return BeckhoffData.Time.Size;
+            if (typeof(T) == typeof(BeckhoffData.Date)) return BeckhoffData.Date.Size;
+            if (typeof(T) == typeof(BeckhoffData.DateTime)) return BeckhoffData.DateTime.Size;
+            if (typeof(T) == typeof(BeckhoffData.DateTimeOfDay)) return BeckhoffData.DateTimeOfDay.Size;
+            if (typeof(T) == typeof(BeckhoffData.LongDate)) return BeckhoffData.LongDate.Size;
+            if (typeof(T) == typeof(BeckhoffData.LongDateTime)) return BeckhoffData.LongDateTime.Size;
+            if (typeof(T) == typeof(BeckhoffData.LongDateTimeOfDay)) return BeckhoffData.LongDateTimeOfDay.Size;
+            if (typeof(T) == typeof(BeckhoffData.LongTime)) return BeckhoffData.LongTime.Size;
+            if (typeof(T) == typeof(BeckhoffData.Time)) return BeckhoffData.Time.Size;
 
             var typeName = typeof(T).Name;
             var fullTypeName = typeof(T).FullName;

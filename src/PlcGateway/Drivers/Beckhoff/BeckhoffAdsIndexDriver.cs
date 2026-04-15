@@ -42,7 +42,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public TValue Read<TValue>(string address)
         {
-            if (TypeEquality<string, TValue>.AreSameType)
+            if (typeof(TValue) == typeof(string))
             {
                 var value = _driver.Read((StringAdsIndexAddress)address);
                 return SelfConverter.ToSelf<string, TValue>(value);
@@ -62,65 +62,65 @@ namespace PlcGateway.Drivers.Beckhoff
             private static Action<string, T, BeckhoffAdsIndexDriverImpl> CreateWriter()
             {
                 // 基元类型
-                if (TypeEquality<T, bool>.AreSameType)
+                if (typeof(T) == typeof(bool))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, bool>(val));
 
-                if (TypeEquality<T, byte>.AreSameType)
+                if (typeof(T) == typeof(byte))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, byte>(val));
 
-                if (TypeEquality<T, sbyte>.AreSameType)
+                if (typeof(T) == typeof(sbyte))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, sbyte>(val));
 
-                if (TypeEquality<T, short>.AreSameType)
+                if (typeof(T) == typeof(short))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, short>(val));
 
-                if (TypeEquality<T, ushort>.AreSameType)
+                if (typeof(T) == typeof(ushort))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, ushort>(val));
 
-                if (TypeEquality<T, int>.AreSameType)
+                if (typeof(T) == typeof(int))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, int>(val));
 
-                if (TypeEquality<T, uint>.AreSameType)
+                if (typeof(T) == typeof(uint))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, uint>(val));
 
-                if (TypeEquality<T, long>.AreSameType)
+                if (typeof(T) == typeof(long))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, long>(val));
 
-                if (TypeEquality<T, ulong>.AreSameType)
+                if (typeof(T) == typeof(ulong))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, ulong>(val));
 
-                if (TypeEquality<T, float>.AreSameType)
+                if (typeof(T) == typeof(float))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, float>(val));
 
-                if (TypeEquality<T, double>.AreSameType)
+                if (typeof(T) == typeof(double))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, double>(val));
 
-                if (TypeEquality<T, string>.AreSameType)
+                if (typeof(T) == typeof(string))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, string>(val));
 
                 #region Beckhoff 专有数据类型
-                if (TypeEquality<T, BeckhoffData.Date>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.Date))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.Date>(val));
 
-                if (TypeEquality<T, BeckhoffData.DateTime>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.DateTime))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.DateTime>(val));
 
-                if (TypeEquality<T, BeckhoffData.DateTimeOfDay>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.DateTimeOfDay))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.DateTimeOfDay>(val));
 
-                if (TypeEquality<T, BeckhoffData.LongDate>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.LongDate))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.LongDate>(val));
 
-                if (TypeEquality<T, BeckhoffData.LongDateTime>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.LongDateTime))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.LongDateTime>(val));
 
-                if (TypeEquality<T, BeckhoffData.LongDateTimeOfDay>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.LongDateTimeOfDay))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.LongDateTimeOfDay>(val));
 
-                if (TypeEquality<T, BeckhoffData.LongTime>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.LongTime))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.LongTime>(val));
 
-                if (TypeEquality<T, BeckhoffData.Time>.AreSameType)
+                if (typeof(T) == typeof(BeckhoffData.Time))
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, BeckhoffData.Time>(val));
                 #endregion
 

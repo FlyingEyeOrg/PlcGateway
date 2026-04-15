@@ -8,11 +8,12 @@ namespace PlcGateway.Core.Converter
     {
         public static TTarget ToSelf<TSource, TTarget>(TSource value)
         {
-            if (!TypeEquality<TSource, TTarget>.AreSameType)
+            if (typeof(TSource) != typeof(TTarget))
             {
-                throw new BusinessException(SELF_CONVERTER_TYPE_MISMATCH,
-                 $"Cannot convert from '{typeof(TSource).Name}' to '{typeof(TTarget).Name}'. Types must be identical.",
-                 $"Source: {typeof(TSource).FullName} | Target: {typeof(TTarget).FullName} | Assembly: {typeof(TSource).Assembly.GetName().Name}");
+                throw new BusinessException(
+                    message: $"Cannot convert from '{typeof(TSource).Name}' to '{typeof(TTarget).Name}'. Types must be identical.",
+                    code: SELF_CONVERTER_TYPE_MISMATCH,
+                    details: $"Source: {typeof(TSource).FullName} | Target: {typeof(TTarget).FullName} | Assembly: {typeof(TSource).Assembly.GetName().Name}");
             }
 
             return Unsafe.As<TSource, TTarget>(ref Unsafe.AsRef(in value));

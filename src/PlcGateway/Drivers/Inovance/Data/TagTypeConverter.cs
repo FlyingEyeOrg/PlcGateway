@@ -1,5 +1,4 @@
-﻿using PlcGateway.Core.Converter;
-using PlcGateway.Core.Exceptions;
+﻿using PlcGateway.Core.Exceptions;
 using PlcGateway.Drivers.Inovance.Exceptions;
 using PlcGateway.Drivers.Inovance.Native;
 using System;
@@ -68,23 +67,23 @@ namespace PlcGateway.Drivers.Inovance.Data
 
         private static TagType GetTagType()
         {
-            if (TypeEquality<TTarget, sbyte>.AreSameType) return TagType.TAG_TYPE_SINT;
-            if (TypeEquality<TTarget, short>.AreSameType) return TagType.TAG_TYPE_INT;
-            if (TypeEquality<TTarget, int>.AreSameType) return TagType.TAG_TYPE_DINT;
-            if (TypeEquality<TTarget, long>.AreSameType) return TagType.TAG_TYPE_LINT;
-            if (TypeEquality<TTarget, byte>.AreSameType) return TagType.TAG_TYPE_USINT;
-            if (TypeEquality<TTarget, ushort>.AreSameType) return TagType.TAG_TYPE_UINT;
-            if (TypeEquality<TTarget, uint>.AreSameType) return TagType.TAG_TYPE_UDINT;
-            if (TypeEquality<TTarget, ulong>.AreSameType) return TagType.TAG_TYPE_ULINT;
-            if (TypeEquality<TTarget, float>.AreSameType) return TagType.TAG_TYPE_REAL;
-            if (TypeEquality<TTarget, double>.AreSameType) return TagType.TAG_TYPE_LREAL;
-            if (TypeEquality<TTarget, Bits8Bit>.AreSameType) return TagType.TAG_TYPE_BYTE;
-            if (TypeEquality<TTarget, Bits16Bit>.AreSameType) return TagType.TAG_TYPE_WORD;
-            if (TypeEquality<TTarget, Bits32Bit>.AreSameType) return TagType.TAG_TYPE_DWORD;
-            if (TypeEquality<TTarget, Bits64Bit>.AreSameType) return TagType.TAG_TYPE_LWORD;
-            if (TypeEquality<TTarget, Structure>.AreSameType) return TagType.TAG_TYPE_STRUCT;
-            if (TypeEquality<TTarget, bool>.AreSameType) return TagType.TAG_TYPE_BOOL;
-            if (TypeEquality<TTarget, string>.AreSameType) return TagType.TAG_TYPE_STRING;
+            if (typeof(TTarget) == typeof(sbyte)) return TagType.TAG_TYPE_SINT;
+            if (typeof(TTarget) == typeof(short)) return TagType.TAG_TYPE_INT;
+            if (typeof(TTarget) == typeof(int)) return TagType.TAG_TYPE_DINT;
+            if (typeof(TTarget) == typeof(long)) return TagType.TAG_TYPE_LINT;
+            if (typeof(TTarget) == typeof(byte)) return TagType.TAG_TYPE_USINT;
+            if (typeof(TTarget) == typeof(ushort)) return TagType.TAG_TYPE_UINT;
+            if (typeof(TTarget) == typeof(uint)) return TagType.TAG_TYPE_UDINT;
+            if (typeof(TTarget) == typeof(ulong)) return TagType.TAG_TYPE_ULINT;
+            if (typeof(TTarget) == typeof(float)) return TagType.TAG_TYPE_REAL;
+            if (typeof(TTarget) == typeof(double)) return TagType.TAG_TYPE_LREAL;
+            if (typeof(TTarget) == typeof(Bits8Bit)) return TagType.TAG_TYPE_BYTE;
+            if (typeof(TTarget) == typeof(Bits16Bit)) return TagType.TAG_TYPE_WORD;
+            if (typeof(TTarget) == typeof(Bits32Bit)) return TagType.TAG_TYPE_DWORD;
+            if (typeof(TTarget) == typeof(Bits64Bit)) return TagType.TAG_TYPE_LWORD;
+            if (typeof(TTarget) == typeof(Structure)) return TagType.TAG_TYPE_STRUCT;
+            if (typeof(TTarget) == typeof(bool)) return TagType.TAG_TYPE_BOOL;
+            if (typeof(TTarget) == typeof(string)) return TagType.TAG_TYPE_STRING;
 
             throw new InovanceException(
                  code: INOVANCE_UNKNOWN_TAG_TYPE,

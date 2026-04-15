@@ -1,52 +1,28 @@
-﻿using PlcGateway.Core.Exceptions;
-using System;
-using System.Runtime.Serialization;
+﻿using System;
+using PlcGateway.Core.Exceptions;
 
 namespace PlcGateway.Drivers.Beckhoff.Exceptions
 {
-    /// <summary>
-    /// 倍福PLC驱动异常
-    /// </summary>
-    [Serializable]
     public class BeckhoffException : BusinessException
     {
-        public BeckhoffException()
-        {
-        }
-
-        public BeckhoffException(string message)
-            : base(message)
-        {
-        }
-
-        public BeckhoffException(string message, Exception innerException)
-            : base(message, innerException)
+        public BeckhoffException(
+            string message,
+            string? code = null,
+            string? details = null,
+            Exception? innerException = null)
+            : base(message, code, details, innerException)
         {
         }
 
         public BeckhoffException(string code, string message)
-            : base(code, message)
+            : base(message, code)
         {
         }
 
         public BeckhoffException(string code, string message, string details)
-            : base(code, message, details)
+            : base(message, code, details)
         {
         }
 
-        public BeckhoffException(string code, string message, string details, Exception innerException)
-            : base(code, message, details, innerException)
-        {
-        }
-
-        public BeckhoffException(string code, string message, string details, string localizationKey, params object[] localizationParameters)
-            : base(code, message, details, localizationKey, localizationParameters)
-        {
-        }
-
-        protected BeckhoffException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context)
-        {
-        }
     }
 }

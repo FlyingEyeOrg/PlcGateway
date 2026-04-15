@@ -526,8 +526,7 @@ namespace PlcGateway.Drivers.Inovance
                             $"Failed to disconnect from PLC. Connection ID: {connectId}.",
                             $"Error: {result} (0x{(int)result:X8})")
                             .WithData("ConnectionId", connectId)
-                            .WithData("ErrorCode", (int)result)
-                            .WithLogLevel(LogLevel.Warning);
+                            .WithData("ErrorCode", (int)result);
                     }
                 }
                 catch (Exception ex) when (!(ex is InovanceException))

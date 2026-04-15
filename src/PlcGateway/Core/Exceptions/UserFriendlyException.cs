@@ -1,48 +1,22 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace PlcGateway.Core.Exceptions
 {
-    /// <summary>
-    /// 用户友好异常（显示给最终用户）
-    /// </summary>
-    [Serializable]
-    public class UserFriendlyException : BusinessException
+    public class UserFriendlyException : BusinessException, IUserFriendlyException
     {
-        public override bool IsUserFriendly => true;
-
-        public UserFriendlyException()
+        public UserFriendlyException(
+            string message,
+            string? code = null,
+            string? details = null,
+            Exception? innerException = null)
+            : base(message, code, details, innerException)
         {
         }
 
-        public UserFriendlyException(string message)
-            : base(message)
-        {
-        }
+        string IUserFriendlyException.Message => Message;
 
-        public UserFriendlyException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+        string? IUserFriendlyException.Code => Code;
 
-        public UserFriendlyException(string code, string message)
-            : base(code, message)
-        {
-        }
-
-        public UserFriendlyException(string code, string message, string details)
-            : base(code, message, details)
-        {
-        }
-
-        public UserFriendlyException(string code, string message, string details, Exception innerException)
-            : base(code, message, details, innerException)
-        {
-        }
-
-        protected UserFriendlyException(SerializationInfo serializationInfo, StreamingContext context)
-            : base(serializationInfo, context)
-        {
-        }
+        string? IUserFriendlyException.Details => Details;
     }
 }
