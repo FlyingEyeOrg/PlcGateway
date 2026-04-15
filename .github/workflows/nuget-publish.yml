@@ -4,7 +4,6 @@ name: Publish NuGet
 permissions:
   id-token: write
   contents: read
-  packages: write
 
 on:
   push:
@@ -50,10 +49,12 @@ jobs:
           dotnet pack src/PlcGateway/PlcGateway.csproj -c Release -o ./artifacts \
             --no-build /p:PackageVersion=${{ steps.vars.outputs.version }} /p:IncludeSymbols=true /p:IncludeSource=true
 
+      - name: NuGet login (OIDC -> temp API key)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Push to NuGet.org using Trusted Publishing
         run: |
-          # When NuGet Trusted Publishing (GitHub Actions integration) is configured for this repository
-          # nuget.org accepts the OIDC-provided identity and no API key is required.
-          # dotnet nuget push still requires a non-empty --api-key value, but it is treated as a placeholder
-          # when Trusted Publishing is enabled on the nuget.org side.
-          dotnet nuget push "./artifacts/PlcGateway.${{ steps.vars.outputs.version }}.nupkg" -s https://api.nuget.org/v3/index.json --api-key NUGET_TRUSTED_PUBLISHING --skip-duplicate
+          dotnet nuget push "./artifacts/PlcGateway.${{ steps.vars.outputs.version }}.nupkg" -s https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
