@@ -162,25 +162,16 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             try
             {
-                if (AdsClient != null)
+                if (IsConnected)
                 {
-                    if (IsConnected)
-                    {
-                        Disconnect();
-                    }
-                    AdsClient.Dispose();
+                    Disconnect();
                 }
+
+                AdsClient.Dispose();
             }
-            catch (Exception ex)
+            catch
             {
-                // Log but don't throw in Dispose
-                // Consider logging this exception
-                throw new BeckhoffException(
-                    code: ADS_DISPOSE_ERROR,
-                    message: "Error occurred while disposing ADS client",
-                    details: $"Exception during disposal: {ex.GetType().Name} - {ex.Message}",
-                    innerException: ex
-                );
+                // Dispose must remain best-effort and should not throw.
             }
         }
 
@@ -232,6 +223,29 @@ namespace PlcGateway.Drivers.Beckhoff
         protected string GetAdsErrorMessage(TwinCAT.Ads.AdsErrorCode errorCode)
         {
             return errorCode.ToMessage();
+        }
+
+        protected byte[] EncodePlcString(string value, int bufferLength)
+        {
+            if (bufferLength <= 0)
+            {
+                throw new BeckhoffException(
+                    code: ADS_INVALID_STRING_LENGTH,
+                    message: "String buffer length must be greater than zero",
+                    details: $"Provided buffer length: {bufferLength}"
+                );
+            }
+
+            var sourceBytes = Encoding.GetBytes(value ?? string.Empty);
+            var buffer = new byte[bufferLength];
+            var copyLength = Math.Min(sourceBytes.Length, Math.Max(bufferLength - 1, 0));
+
+            if (copyLength > 0)
+            {
+                Buffer.BlockCopy(sourceBytes, 0, buffer, 0, copyLength);
+            }
+
+            return buffer;
         }
     }
 }

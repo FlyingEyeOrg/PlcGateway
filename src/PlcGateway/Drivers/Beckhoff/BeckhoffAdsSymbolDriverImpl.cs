@@ -341,8 +341,7 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             var symbol = GetSymbol(instancePath);
 
-            // For string writing, we need to handle encoding
-            byte[] bytes = this.Encoding.GetBytes(value);
+            var bytes = EncodePlcString(value, symbol.Size);
             var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, bytes);
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
@@ -351,6 +350,34 @@ namespace PlcGateway.Drivers.Beckhoff
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write string value '{value}' to PLC at indices {instancePath}",
                     details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}. String length: {value.Length} chars, {bytes.Length} bytes"
+                );
+            }
+        }
+
+        public string ReadString(string instancePath)
+        {
+            var symbol = GetSymbol(instancePath);
+            var result = this.AdsClient.ReadAsResult(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
+
+            if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
+            {
+                throw new BeckhoffException(
+                    code: ADS_READ_ERROR,
+                    message: $"Failed to read string from PLC at address {instancePath}",
+                    details: $"ADS Error Code: {result.ErrorCode} (0x{(uint)result.ErrorCode:X8}) - {GetAdsErrorMessage(result.ErrorCode)}. IndexGroup: 0x{symbol.IndexGroup:X8}, IndexOffset: 0x{symbol.IndexOffset:X8}, Requested size: {symbol.Size} bytes"
+                );
+            }
+
+            try
+            {
+                return ByteArrayConverter<string>.Convert(result.Data.ToArray(), this.Encoding);
+            }
+            catch (Exception ex) when (ex is DecoderFallbackException || ex is ArgumentException)
+            {
+                throw new BeckhoffException(
+                    code: ADS_STRING_DECODING_ERROR,
+                    message: $"Failed to decode string from PLC at address {instancePath}",
+                    details: $"Symbol size: {symbol.Size}, actual bytes read: {result.Data.Length}, inner exception: {ex.Message}"
                 );
             }
         }

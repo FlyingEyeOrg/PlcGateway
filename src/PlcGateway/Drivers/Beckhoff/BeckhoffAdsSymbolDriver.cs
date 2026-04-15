@@ -42,6 +42,12 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public TValue Read<TValue>(string instancePath)
         {
+            if (typeof(TValue) == typeof(string))
+            {
+                var value = _driver.ReadString(instancePath);
+                return SelfConverter.ToSelf<string, TValue>(value);
+            }
+
             return _driver.Read<TValue>(instancePath);
         }
 

@@ -174,7 +174,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public void Write(AdsIndexAddress address, string value)
         {
-            byte[] bytes = this.Encoding.GetBytes(value);
+            var bytes = this.Encoding.GetBytes(value ?? string.Empty);
 
             var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, bytes);
 
@@ -183,7 +183,22 @@ namespace PlcGateway.Drivers.Beckhoff
                 throw new BeckhoffException(
                     code: ADS_WRITE_ERROR,
                     message: $"Failed to write string value '{value}' to PLC at address {address}",
-                    details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}. String length: {value.Length} chars, {bytes.Length} bytes"
+                    details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}. String length: {value?.Length ?? 0} chars, {bytes.Length} bytes"
+                );
+            }
+        }
+
+        public void Write(StringAdsIndexAddress address, string value)
+        {
+            var bytes = EncodePlcString(value, address.DataLength);
+            var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, bytes);
+
+            if (code != TwinCAT.Ads.AdsErrorCode.NoError)
+            {
+                throw new BeckhoffException(
+                    code: ADS_WRITE_ERROR,
+                    message: $"Failed to write string value '{value}' to PLC at address {address}",
+                    details: $"ADS Error Code: {code} (0x{(uint)code:X8}) - {GetAdsErrorMessage(code)}. Buffer length: {address.DataLength} bytes"
                 );
             }
         }

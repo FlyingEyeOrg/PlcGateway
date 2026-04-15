@@ -96,7 +96,7 @@ namespace PlcGateway.Drivers.Beckhoff
                     return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, double>(val));
 
                 if (typeof(T) == typeof(string))
-                    return (addr, val, drv) => drv.Write(addr, SelfConverter.ToSelf<T, string>(val));
+                    return (addr, val, drv) => drv.Write((StringAdsIndexAddress)addr, SelfConverter.ToSelf<T, string>(val));
 
                 #region Beckhoff 专有数据类型
                 if (typeof(T) == typeof(BeckhoffData.Date))
