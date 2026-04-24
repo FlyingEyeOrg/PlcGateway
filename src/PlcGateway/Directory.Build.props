@@ -15,7 +15,7 @@
 			示例：1.0.0-rc.1 表示第一个发布候选版本
 			示例：1.0.0 表示稳定版本
 		-->
-		<PackageVersion>1.0.3</PackageVersion>
+		<PackageVersion>1.0.4</PackageVersion>
 
 		<!--
 			包说明的精简摘要。会显示在 NuGet 包列表和搜索结果中。
