@@ -415,7 +415,7 @@ namespace PlcGateway.Drivers.Inovance
 
             if (targetTag != tagType)
             {
-                var actualType = TagTypeConverter.GetType(targetTag);
+                var actualType = TagTypeConverter.GetType(tagType);
 
                 throw new InovanceException(INOVANCE_TYPE_MISMATCH,
                     $"Tag type mismatch. Expected: {typeof(TValue).Name}, Actual: {actualType.Name}.")
@@ -464,11 +464,12 @@ namespace PlcGateway.Drivers.Inovance
                 EipProtocolStack.EipStart(hostIP);
 
                 // 打开连接
+                int connectId = 0;
                 try
                 {
                     var result = UnsafeNativeMethods.EipOpenConnection(
                         deviceIP.ToString(),
-                        out int connectId);
+                        out connectId);
 
                     if (result != Native.NativeErrorCode.SUCCESS)
                     {
@@ -496,7 +497,12 @@ namespace PlcGateway.Drivers.Inovance
                 }
                 catch
                 {
-                    // 任何异常都清理协议栈
+                    // 关闭已打开的连接（如果存在）
+                    if (connectId != 0)
+                    {
+                        UnsafeNativeMethods.EipCloseConnection(connectId);
+                    }
+                    // 清理协议栈
                     EipProtocolStack.EipStop(hostIP);
                     throw;  // 重新抛出原始异常
                 }
