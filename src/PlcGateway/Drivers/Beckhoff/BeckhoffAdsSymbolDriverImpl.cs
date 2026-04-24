@@ -13,7 +13,8 @@ namespace PlcGateway.Drivers.Beckhoff
 {
     internal class BeckhoffAdsSymbolDriverImpl : BeckhoffDriverImplBase
     {
-        private ConcurrentDictionary<string, IAdsSymbol>? Symbols { get; set; } = null;
+        private volatile ConcurrentDictionary<string, IAdsSymbol>? Symbols = null;
+        private readonly object _initLock = new object();
 
         public BeckhoffAdsSymbolDriverImpl(AmsNetId amsNetId, AmsPort port, Encoding encoding) : base(amsNetId, port, encoding)
         {
@@ -41,10 +42,7 @@ namespace PlcGateway.Drivers.Beckhoff
         public override void Disconnect()
         {
             base.Disconnect();
-            if (this.Symbols != null)
-            {
-                Symbols = null;
-            }
+            Symbols = null;
         }
 
         /// <summary>
@@ -65,8 +63,9 @@ namespace PlcGateway.Drivers.Beckhoff
                 );
             }
 
-            // Check if symbol cache is initialized
-            if (Symbols == null)
+            // Snapshot Symbols reference to avoid TOCTOU race with Disconnect()
+            var symbols = Symbols;
+            if (symbols == null)
             {
                 throw new BeckhoffException(
                     code: ADS_SYMBOL_CACHE_NOT_INITIALIZED,
@@ -78,7 +77,7 @@ namespace PlcGateway.Drivers.Beckhoff
             string normalizedPath = instancePath.Trim();
 
             // First attempt: Try to get symbol from cache
-            if (Symbols.TryGetValue(normalizedPath, out var symbol))
+            if (symbols.TryGetValue(normalizedPath, out var symbol))
             {
                 return symbol;
             }
@@ -104,8 +103,12 @@ namespace PlcGateway.Drivers.Beckhoff
                 );
             }
 
-            // Add symbol to cache for future use
-            this.Symbols[newSymbol.InstancePath] = newSymbol;
+            // Add symbol to cache for future use (re-read Symbols in case it was replaced by InitializeSymbols)
+            var currentSymbols = Symbols;
+            if (currentSymbols != null)
+            {
+                currentSymbols[newSymbol.InstancePath] = newSymbol;
+            }
 
             return newSymbol;
         }
@@ -115,60 +118,65 @@ namespace PlcGateway.Drivers.Beckhoff
         /// </summary>
         public void InitializeSymbols()
         {
-            var loader = SymbolLoaderFactory.Create(this.AdsClient, SymbolLoaderSettings.Default);
-            var resultSymbols = loader.GetSymbols();
-
-            if (resultSymbols.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
+            lock (_initLock)
             {
-                throw new BeckhoffException(
-                    code: ADS_SYMBOL_LOAD_FAILED,
-                    message: "Failed to load PLC symbols from target device",
-                    details: $"ADS Error Code: {resultSymbols.ErrorCode} ({(int)resultSymbols.ErrorCode}). " +
-                            $"Possible causes: Target PLC is not running, ADS service is not started, " +
-                            $"or insufficient permissions to access PLC symbols."
-                );
-            }
+                var loader = SymbolLoaderFactory.Create(this.AdsClient, SymbolLoaderSettings.Default);
+                var resultSymbols = loader.GetSymbols();
 
-            if (resultSymbols.Symbols == null || resultSymbols.Symbols.Count == 0)
-            {
-                throw new BeckhoffException(
-                    code: ADS_NO_SYMBOLS_FOUND,
-                    message: "No PLC symbols found on the target device",
-                    details: "The PLC symbol table appears to be empty. " +
-                            "Possible causes: PLC program is not compiled with debug information, " +
-                            "or the symbol table is not available in the current runtime mode."
-                );
-            }
-
-            // Save symbol information
-            this.Symbols = new ConcurrentDictionary<string, IAdsSymbol>();
-
-            int validSymbols = 0;
-            int invalidSymbols = 0;
-
-            foreach (var symbol in resultSymbols.Symbols)
-            {
-                var adsSymbol = symbol as IAdsSymbol;
-
-                if (string.IsNullOrWhiteSpace(symbol.InstancePath) || adsSymbol == null)
+                if (resultSymbols.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
                 {
-                    invalidSymbols++;
-                    continue;
+                    throw new BeckhoffException(
+                        code: ADS_SYMBOL_LOAD_FAILED,
+                        message: "Failed to load PLC symbols from target device",
+                        details: $"ADS Error Code: {resultSymbols.ErrorCode} ({(int)resultSymbols.ErrorCode}). " +
+                                $"Possible causes: Target PLC is not running, ADS service is not started, " +
+                                $"or insufficient permissions to access PLC symbols."
+                    );
                 }
 
-                this.Symbols[symbol.InstancePath] = adsSymbol;
-                validSymbols++;
-            }
+                if (resultSymbols.Symbols == null || resultSymbols.Symbols.Count == 0)
+                {
+                    throw new BeckhoffException(
+                        code: ADS_NO_SYMBOLS_FOUND,
+                        message: "No PLC symbols found on the target device",
+                        details: "The PLC symbol table appears to be empty. " +
+                                "Possible causes: PLC program is not compiled with debug information, " +
+                                "or the symbol table is not available in the current runtime mode."
+                    );
+                }
 
-            if (validSymbols == 0)
-            {
-                throw new BeckhoffException(
-                    code: ADS_NO_VALID_SYMBOLS,
-                    message: "No valid symbols with instance paths found",
-                    details: $"Total symbols loaded: {resultSymbols.Symbols.Count}, " +
-                            $"Symbols with invalid/empty instance paths: {invalidSymbols}. " +
-                            "Check if the PLC program contains proper symbol definitions with instance paths."
-                );
+                // Save symbol information
+                var newSymbols = new ConcurrentDictionary<string, IAdsSymbol>();
+
+                int validSymbols = 0;
+                int invalidSymbols = 0;
+
+                foreach (var symbol in resultSymbols.Symbols)
+                {
+                    var adsSymbol = symbol as IAdsSymbol;
+
+                    if (string.IsNullOrWhiteSpace(symbol.InstancePath) || adsSymbol == null)
+                    {
+                        invalidSymbols++;
+                        continue;
+                    }
+
+                    newSymbols[symbol.InstancePath] = adsSymbol;
+                    validSymbols++;
+                }
+
+                if (validSymbols == 0)
+                {
+                    throw new BeckhoffException(
+                        code: ADS_NO_VALID_SYMBOLS,
+                        message: "No valid symbols with instance paths found",
+                        details: $"Total symbols loaded: {resultSymbols.Symbols.Count}, " +
+                                $"Symbols with invalid/empty instance paths: {invalidSymbols}. " +
+                                "Check if the PLC program contains proper symbol definitions with instance paths."
+                    );
+                }
+
+                this.Symbols = newSymbols;
             }
         }
 
