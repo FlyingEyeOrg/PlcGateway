@@ -32,16 +32,6 @@ namespace PlcGateway.Drivers.Beckhoff
                 message: "Encoding cannot be null",
                 details: "Provide a valid encoding for string operations"
             );
-
-            // Validate encoding
-            if (Encoding == null)
-            {
-                throw new BeckhoffException(
-                    code: ADS_INVALID_ENCODING,
-                    message: "Default encoding is null",
-                    details: "Encoding must be properly initialized"
-                );
-            }
         }
 
         public BeckhoffDriverImplBase(AmsNetId amsNetId, AmsPort port)
