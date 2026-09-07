@@ -1,5 +1,4 @@
 ﻿using PlcGateway.Core.Exceptions;
-using System.Runtime.CompilerServices;
 using static PlcGateway.Drivers.ErrorCode;
 
 namespace PlcGateway.Core.Converter
@@ -16,7 +15,7 @@ namespace PlcGateway.Core.Converter
                     details: $"Source: {typeof(TSource).FullName} | Target: {typeof(TTarget).FullName} | Assembly: {typeof(TSource).Assembly.GetName().Name}");
             }
 
-            return Unsafe.As<TSource, TTarget>(ref Unsafe.AsRef(in value));
+            return (TTarget)(object)value!;
         }
     }
 }

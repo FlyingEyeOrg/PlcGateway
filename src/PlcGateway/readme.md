@@ -27,6 +27,7 @@
 
 - 支持 ADS 索引地址与符号地址
 - 支持基础类型和倍福专用日期时间类型
+- 基于 `Beckhoff.TwinCAT.Ads 4.4.71`，同时支持 TwinCAT 2 与 TwinCAT 3
 - 适合 Win32 / Win64 环境下的 ADS 通信
 
 ## 安装
@@ -41,9 +42,8 @@ dotnet add package PlcGateway
 
 ```csharp
 using PlcGateway.Drivers.Beckhoff;
-using TwinCAT.Ads;
 
-var driver = new BeckhoffAdsIndexDriver(new AmsNetId("1.2.3.4.5.6"), new AmsPort(851));
+using var driver = new BeckhoffAdsIndexDriver("192.168.250.111.1.1", 851);
 driver.Connect();
 
 var value = driver.Read<int>("[0x4020,0]");
@@ -56,9 +56,8 @@ driver.Disconnect();
 
 ```csharp
 using PlcGateway.Drivers.Beckhoff;
-using TwinCAT.Ads;
 
-var driver = new BeckhoffAdsSymbolDriver(new AmsNetId("1.2.3.4.5.6"), new AmsPort(851));
+using var driver = new BeckhoffAdsSymbolDriver("192.168.250.111.1.1", 851);
 driver.Connect();
 
 var value = driver.Read<string>("MAIN.MyString");
@@ -66,6 +65,14 @@ driver.Write("MAIN.MyString", "hello");
 
 driver.Disconnect();
 ```
+
+### TwinCAT 版本与连接参数
+
+- TwinCAT 2 常用 PLC Runtime 端口：`801`、`811`、`821`、`831`。
+- TwinCAT 3 常用 PLC Runtime 端口：`851`、`852`、`853`、`854`。
+- 构造函数接收的是 AMS Net ID，不是单纯的设备 IP 地址。
+- Windows 设备必须安装并运行 TwinCAT ADS Router，并在通信双方配置正确的 AMS Route。
+- ADS 4.4.71 只提供 .NET Framework 资产；在现代 .NET Windows 项目中可能看到 `NU1701`，本驱动不支持 Linux 或 macOS。
 
 ### 汇川驱动
 

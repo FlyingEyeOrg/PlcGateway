@@ -13,7 +13,7 @@ namespace PlcGateway.Drivers.Beckhoff
 {
     internal class BeckhoffAdsSymbolDriverImpl : BeckhoffDriverImplBase
     {
-        private volatile ConcurrentDictionary<string, IAdsSymbol>? Symbols = null;
+        private volatile ConcurrentDictionary<string, AdsSymbolMetadata>? Symbols = null;
         private readonly object _initLock = new object();
 
         public BeckhoffAdsSymbolDriverImpl(AmsNetId amsNetId, AmsPort port, Encoding encoding) : base(amsNetId, port, encoding)
@@ -22,6 +22,14 @@ namespace PlcGateway.Drivers.Beckhoff
         }
 
         public BeckhoffAdsSymbolDriverImpl(AmsNetId amsNetId, AmsPort port) : base(amsNetId, port)
+        {
+        }
+
+        public BeckhoffAdsSymbolDriverImpl(string amsNetId, int port, Encoding encoding) : base(amsNetId, port, encoding)
+        {
+        }
+
+        public BeckhoffAdsSymbolDriverImpl(string amsNetId, int port) : base(amsNetId, port)
         {
         }
 
@@ -51,7 +59,7 @@ namespace PlcGateway.Drivers.Beckhoff
         /// <param name="instancePath">The instance path of the symbol (e.g., "MAIN.MyVariable")</param>
         /// <returns>The ISymbol instance for the requested symbol</returns>
         /// <exception cref="BeckhoffException">Thrown when the symbol is not found or cache is not initialized</exception>
-        private IAdsSymbol GetSymbol(string instancePath)
+        private AdsSymbolMetadata GetSymbol(string instancePath)
         {
             // Validate input parameter
             if (string.IsNullOrWhiteSpace(instancePath))
@@ -82,24 +90,39 @@ namespace PlcGateway.Drivers.Beckhoff
                 return symbol;
             }
 
-            // Second attempt: Try to read symbol directly from PLC
-            var errorCode = this.AdsClient.TryReadSymbol(normalizedPath, out var newSymbol);
-
-            if (errorCode != TwinCAT.Ads.AdsErrorCode.NoError)
+            // Second attempt: read the legacy ADS symbol information directly from the PLC.
+            ITcAdsSymbol symbolInfo;
+            try
+            {
+                symbolInfo = this.AdsClient.ReadSymbolInfo(normalizedPath);
+            }
+            catch (AdsErrorException ex)
             {
                 throw new BeckhoffException(
                     code: ADS_SYMBOL_NOT_FOUND,
                     message: $"Symbol '{normalizedPath}' not found in PLC",
-                    details: $"ADS Error: {errorCode} (0x{(int)errorCode:X8}). The symbol may not exist or PLC is not accessible."
+                    details: $"ADS Error: {ex.ErrorCode} (0x{(int)ex.ErrorCode:X8}). The symbol may not exist or PLC is not accessible.",
+                    innerException: ex
                 );
             }
 
-            if (newSymbol == null)
+            AdsSymbolMetadata newSymbol;
+            try
+            {
+                newSymbol = new AdsSymbolMetadata(
+                    normalizedPath,
+                    checked((uint)symbolInfo.IndexGroup),
+                    checked((uint)symbolInfo.IndexOffset),
+                    symbolInfo.Size
+                );
+            }
+            catch (OverflowException ex)
             {
                 throw new BeckhoffException(
                     code: ADS_SYMBOL_INVALID,
-                    message: $"Symbol '{normalizedPath}' returned null from PLC",
-                    details: "PLC returned a null symbol object. This may indicate a PLC configuration issue."
+                    message: $"Symbol '{normalizedPath}' contains an invalid process image address",
+                    details: $"IndexGroup: {symbolInfo.IndexGroup}, IndexOffset: {symbolInfo.IndexOffset}.",
+                    innerException: ex
                 );
             }
 
@@ -120,21 +143,32 @@ namespace PlcGateway.Drivers.Beckhoff
         {
             lock (_initLock)
             {
-                var loader = SymbolLoaderFactory.Create(this.AdsClient, SymbolLoaderSettings.Default);
-                var resultSymbols = loader.GetSymbols();
+                TwinCAT.TypeSystem.ReadOnlySymbolCollection resultSymbols;
+                try
+                {
+                    var loader = SymbolLoaderFactory.Create(this.AdsClient, SymbolLoaderSettings.Default)
+                        as IAdsSymbolLoader;
 
-                if (resultSymbols.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
+                    if (loader == null)
+                    {
+                        throw new InvalidOperationException("The ADS symbol loader does not support ADS symbols.");
+                    }
+
+                    resultSymbols = loader.Symbols;
+                }
+                catch (AdsErrorException ex)
                 {
                     throw new BeckhoffException(
                         code: ADS_SYMBOL_LOAD_FAILED,
                         message: "Failed to load PLC symbols from target device",
-                        details: $"ADS Error Code: {resultSymbols.ErrorCode} ({(int)resultSymbols.ErrorCode}). " +
+                        details: $"ADS Error Code: {ex.ErrorCode} ({(int)ex.ErrorCode}). " +
                                 $"Possible causes: Target PLC is not running, ADS service is not started, " +
-                                $"or insufficient permissions to access PLC symbols."
+                                $"or insufficient permissions to access PLC symbols.",
+                        innerException: ex
                     );
                 }
 
-                if (resultSymbols.Symbols == null || resultSymbols.Symbols.Count == 0)
+                if (resultSymbols.Count == 0)
                 {
                     throw new BeckhoffException(
                         code: ADS_NO_SYMBOLS_FOUND,
@@ -146,12 +180,12 @@ namespace PlcGateway.Drivers.Beckhoff
                 }
 
                 // Save symbol information
-                var newSymbols = new ConcurrentDictionary<string, IAdsSymbol>();
+                var newSymbols = new ConcurrentDictionary<string, AdsSymbolMetadata>();
 
                 int validSymbols = 0;
                 int invalidSymbols = 0;
 
-                foreach (var symbol in resultSymbols.Symbols)
+                foreach (var symbol in resultSymbols)
                 {
                     var adsSymbol = symbol as IAdsSymbol;
 
@@ -161,7 +195,12 @@ namespace PlcGateway.Drivers.Beckhoff
                         continue;
                     }
 
-                    newSymbols[symbol.InstancePath] = adsSymbol;
+                    newSymbols[symbol.InstancePath] = new AdsSymbolMetadata(
+                        symbol.InstancePath,
+                        adsSymbol.IndexGroup,
+                        adsSymbol.IndexOffset,
+                        adsSymbol.Size
+                    );
                     validSymbols++;
                 }
 
@@ -170,7 +209,7 @@ namespace PlcGateway.Drivers.Beckhoff
                     throw new BeckhoffException(
                         code: ADS_NO_VALID_SYMBOLS,
                         message: "No valid symbols with instance paths found",
-                        details: $"Total symbols loaded: {resultSymbols.Symbols.Count}, " +
+                        details: $"Total symbols loaded: {resultSymbols.Count}, " +
                                 $"Symbols with invalid/empty instance paths: {invalidSymbols}. " +
                                 "Check if the PLC program contains proper symbol definitions with instance paths."
                     );
@@ -180,10 +219,29 @@ namespace PlcGateway.Drivers.Beckhoff
             }
         }
 
+        private sealed class AdsSymbolMetadata
+        {
+            public string InstancePath { get; }
+
+            public uint IndexGroup { get; }
+
+            public uint IndexOffset { get; }
+
+            public int Size { get; }
+
+            public AdsSymbolMetadata(string instancePath, uint indexGroup, uint indexOffset, int size)
+            {
+                InstancePath = instancePath;
+                IndexGroup = indexGroup;
+                IndexOffset = indexOffset;
+                Size = size;
+            }
+        }
+
         public void Write(string instancePath, sbyte value)
         {
             var symbol = GetSymbol(instancePath);
-            var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
+            var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, new[] { unchecked((byte)value) });
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -198,7 +256,7 @@ namespace PlcGateway.Drivers.Beckhoff
         public void Write(string instancePath, byte value)
         {
             var symbol = GetSymbol(instancePath);
-            var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, BitConverter.GetBytes(value));
+            var code = this.AdsClient.TryWrite(symbol.IndexGroup, symbol.IndexOffset, new[] { value });
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -365,7 +423,7 @@ namespace PlcGateway.Drivers.Beckhoff
         public string ReadString(string instancePath)
         {
             var symbol = GetSymbol(instancePath);
-            var result = this.AdsClient.ReadAsResult(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
+            var result = this.ReadBytes(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
 
             if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -378,7 +436,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             try
             {
-                return ByteArrayConverter<string>.Convert(result.Data.ToArray(), this.Encoding);
+                return ByteArrayConverter<string>.Convert(result.Data, this.Encoding);
             }
             catch (Exception ex) when (ex is DecoderFallbackException || ex is ArgumentException)
             {
@@ -445,7 +503,7 @@ namespace PlcGateway.Drivers.Beckhoff
                 );
             }
 
-            var result = this.AdsClient.ReadAsResult(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
+            var result = this.ReadBytes(symbol.IndexGroup, symbol.IndexOffset, symbol.Size);
 
             if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -458,7 +516,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             try
             {
-                return ByteArrayConverter<TValue>.Convert(result.Data.ToArray(), this.Encoding);
+                return ByteArrayConverter<TValue>.Convert(result.Data, this.Encoding);
             }
             catch (Exception ex) when (ex is InvalidCastException || ex is ArgumentException || ex is FormatException)
             {

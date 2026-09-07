@@ -9,7 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Beckhoff.TwinCAT.Ads" Version="7.0.132" />
+		<PackageReference Include="Beckhoff.TwinCAT.Ads" Version="4.4.71">
+			<NoWarn>NU1701</NoWarn>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>

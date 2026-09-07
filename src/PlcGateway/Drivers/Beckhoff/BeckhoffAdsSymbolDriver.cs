@@ -25,6 +25,16 @@ namespace PlcGateway.Drivers.Beckhoff
             _driver = new BeckhoffAdsSymbolDriverImpl(amsNetId, port);
         }
 
+        public BeckhoffAdsSymbolDriver(string amsNetId, int port, Encoding defaultEncoding)
+        {
+            _driver = new BeckhoffAdsSymbolDriverImpl(amsNetId, port, defaultEncoding);
+        }
+
+        public BeckhoffAdsSymbolDriver(string amsNetId, int port)
+        {
+            _driver = new BeckhoffAdsSymbolDriverImpl(amsNetId, port);
+        }
+
         public void Connect()
         {
             _driver.Connect();

@@ -12,7 +12,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public AmsPort Port { get; }
 
-        protected readonly AdsClient AdsClient = new AdsClient();
+        protected readonly TcAdsClient AdsClient = new TcAdsClient();
 
         public Encoding Encoding { get; }
 
@@ -35,6 +35,16 @@ namespace PlcGateway.Drivers.Beckhoff
         }
 
         public BeckhoffDriverImplBase(AmsNetId amsNetId, AmsPort port)
+            : this(amsNetId, port, Encoding.UTF8)
+        {
+        }
+
+        public BeckhoffDriverImplBase(string amsNetId, int port, Encoding defaultEncoding)
+            : this(ParseAmsNetId(amsNetId), ParseAmsPort(port), defaultEncoding)
+        {
+        }
+
+        public BeckhoffDriverImplBase(string amsNetId, int port)
             : this(amsNetId, port, Encoding.UTF8)
         {
         }
@@ -215,6 +225,19 @@ namespace PlcGateway.Drivers.Beckhoff
             return errorCode.ToMessage();
         }
 
+        protected AdsReadBufferResult ReadBytes(uint indexGroup, uint indexOffset, int length)
+        {
+            var data = new byte[length];
+            var errorCode = AdsClient.TryRead(indexGroup, indexOffset, data, 0, length, out var bytesRead);
+
+            if (errorCode == TwinCAT.Ads.AdsErrorCode.NoError && bytesRead != length)
+            {
+                errorCode = TwinCAT.Ads.AdsErrorCode.DeviceInvalidSize;
+            }
+
+            return new AdsReadBufferResult(errorCode, data, bytesRead);
+        }
+
         protected byte[] EncodePlcString(string value, int bufferLength)
         {
             if (bufferLength <= 0)
@@ -237,5 +260,54 @@ namespace PlcGateway.Drivers.Beckhoff
 
             return buffer;
         }
+
+        private static AmsNetId ParseAmsNetId(string amsNetId)
+        {
+            if (string.IsNullOrWhiteSpace(amsNetId))
+            {
+                throw new ArgumentException("AMS Net ID cannot be null or empty.", nameof(amsNetId));
+            }
+
+            return new AmsNetId(amsNetId.Trim());
+        }
+
+        private static AmsPort ParseAmsPort(int port)
+        {
+            if (port < 1 || port > ushort.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException(nameof(port), port, "AMS port must be between 1 and 65535.");
+            }
+
+            return (AmsPort)port;
+        }
+
+        protected readonly struct AdsReadBufferResult
+        {
+            public TwinCAT.Ads.AdsErrorCode ErrorCode { get; }
+
+            public byte[] Data { get; }
+
+            public int BytesRead { get; }
+
+            public AdsReadBufferResult(TwinCAT.Ads.AdsErrorCode errorCode, byte[] data, int bytesRead)
+            {
+                ErrorCode = errorCode;
+                Data = data;
+                BytesRead = bytesRead;
+            }
+        }
+    }
+
+    internal static class TcAdsClientCompatibilityExtensions
+    {
+        public static TwinCAT.Ads.AdsErrorCode TryWrite(
+            this TcAdsClient client,
+            uint indexGroup,
+            uint indexOffset,
+            byte[] data)
+        {
+            return client.TryWrite(indexGroup, indexOffset, data, 0, data.Length);
+        }
+
     }
 }

@@ -18,9 +18,17 @@ namespace PlcGateway.Drivers.Beckhoff
         {
         }
 
+        public BeckhoffAdsIndexDriverImpl(string amsNetId, int port, Encoding encoding) : base(amsNetId, port, encoding)
+        {
+        }
+
+        public BeckhoffAdsIndexDriverImpl(string amsNetId, int port) : base(amsNetId, port)
+        {
+        }
+
         public void Write(AdsIndexAddress address, sbyte value)
         {
-            var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
+            var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, new[] { unchecked((byte)value) });
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -34,7 +42,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public void Write(AdsIndexAddress address, byte value)
         {
-            var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, BitConverter.GetBytes(value));
+            var code = this.AdsClient.TryWrite(address.IndexGroup, address.IndexOffset, new[] { value });
 
             if (code != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -246,7 +254,7 @@ namespace PlcGateway.Drivers.Beckhoff
         public TValue Read<TValue>(AdsIndexAddress address)
         {
             var size = SizeOf<TValue>.Value;
-            var result = this.AdsClient.ReadAsResult(address.IndexGroup, address.IndexOffset, size);
+            var result = this.ReadBytes(address.IndexGroup, address.IndexOffset, size);
 
             if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -259,7 +267,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             try
             {
-                return ByteArrayConverter<TValue>.Convert(result.Data.ToArray(), this.Encoding);
+                return ByteArrayConverter<TValue>.Convert(result.Data, this.Encoding);
             }
             catch (Exception ex) when (ex is InvalidCastException || ex is ArgumentException || ex is FormatException)
             {
@@ -273,7 +281,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
         public string Read(StringAdsIndexAddress address)
         {
-            var result = this.AdsClient.ReadAsResult(address.IndexGroup, address.IndexOffset, address.DataLength);
+            var result = this.ReadBytes(address.IndexGroup, address.IndexOffset, address.DataLength);
 
             if (result.ErrorCode != TwinCAT.Ads.AdsErrorCode.NoError)
             {
@@ -286,7 +294,7 @@ namespace PlcGateway.Drivers.Beckhoff
 
             try
             {
-                var bytes = result.Data.ToArray();
+                var bytes = result.Data;
                 string resultString = this.Encoding.GetString(bytes);
 
                 // Trim null terminators

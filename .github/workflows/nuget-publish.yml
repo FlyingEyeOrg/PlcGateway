@@ -52,10 +52,10 @@ jobs:
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Restore
-        run: dotnet restore PlcGateway.sln
+        run: dotnet restore src/PlcGateway/PlcGateway.csproj
 
       - name: Build
-        run: dotnet build PlcGateway.sln -c Release --no-restore
+        run: dotnet build src/PlcGateway/PlcGateway.csproj -c Release --no-restore
 
       - name: Pack PlcGateway
         shell: pwsh

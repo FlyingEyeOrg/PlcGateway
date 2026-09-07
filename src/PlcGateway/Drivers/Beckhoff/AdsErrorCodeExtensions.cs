@@ -109,22 +109,17 @@
                 TwinCAT.Ads.AdsErrorCode.ClientVariableInUse => "Client: Variable connection is already in use.",
                 TwinCAT.Ads.AdsErrorCode.ClientDuplicateInvokeID => "Client: Invoke ID already in use.",
                 TwinCAT.Ads.AdsErrorCode.ClientSyncTimeOut => "Client: Timeout has elapsed.",
-                TwinCAT.Ads.AdsErrorCode.ClientW32Error => "Client: Error in win32 subsystem.",
+                TwinCAT.Ads.AdsErrorCode.ClientW32OR => "Client: Error in Win32 subsystem.",
                 TwinCAT.Ads.AdsErrorCode.ClientTimeoutInvalid => "Client: Timeout value is invalid.",
                 TwinCAT.Ads.AdsErrorCode.ClientPortNotOpen => "Client: ADS port is not opened.",
                 TwinCAT.Ads.AdsErrorCode.ClientNoAmsAddr => "Client: No AMS Address.",
                 TwinCAT.Ads.AdsErrorCode.ClientSyncInternal => "Client: An internal in ADS sync has occurred.",
                 TwinCAT.Ads.AdsErrorCode.ClientResponseInvalid => "Client: An invalid response has been received.",
                 TwinCAT.Ads.AdsErrorCode.ClientPortLocked => "Client: The synchronous ADS Port is locked.",
-                TwinCAT.Ads.AdsErrorCode.ClientRequestCancelled => "Client: The client Request was cancelled (asynchronously).",
                 TwinCAT.Ads.AdsErrorCode.ClientQueueFull => "Client: The ADS Client queue is full.",
 
                 // Windows Socket Errors
-                TwinCAT.Ads.AdsErrorCode.WSA_ConnAborted => "Windows Socket: Software caused connection abort.",
-                TwinCAT.Ads.AdsErrorCode.WSA_ConnReset => "Windows Socket: Connection reset by peer.",
                 TwinCAT.Ads.AdsErrorCode.WSA_ConnRefused => "Windows Socket: Connection refused.",
-                TwinCAT.Ads.AdsErrorCode.WSA_TimedOut => "Windows Socket: Connection attempt timed out.",
-                TwinCAT.Ads.AdsErrorCode.WSA_HostUnreachable => "Windows Socket: No route to the specified host.",
 
                 _ => $"Unknown ADS error code: {errorCode} (0x{(uint)errorCode:X8})"
             };
